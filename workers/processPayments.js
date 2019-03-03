@@ -63,7 +63,7 @@ async function processPayments() {
       // Calculate total unpaid 
 
       // Sign a mass payment for each produced block
-      axios.post('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/transactions/sign',
+      axios.post('https://' + process.env.NODE_IP + '/transactions/sign',
       {
         type: 11,
         version: 1,
@@ -77,7 +77,7 @@ async function processPayments() {
         }
       })
       .then(signed => {
-        return axios.post('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/transactions/broadcast',
+        return axios.post('https://' + process.env.NODE_IP + '/transactions/broadcast',
         signed.data,
         {
           headers: { 

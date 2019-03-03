@@ -39,7 +39,7 @@ async function verifyBlocks() {
         // 40% of the fee of the produced block and 60% of the fee of block whose reference
         // corresponds with the signature of the produced block. Use the node API to find this
         
-        axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/blocks/at/' + (+block.blockIndex - 1))
+        axios.get('https://' + process.env.NODE_IP + '/blocks/at/' + (+block.blockIndex - 1))
         .then(res => {
           const prevBlockFee = (res.data.fee / process.env.ATOMIC)
           const reward = (block.fee * 0.4) + (prevBlockFee * 0.6)

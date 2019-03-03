@@ -23,7 +23,7 @@ cron.schedule('* * * * *', () => {
 
   try {
     // Fetch active leases
-    const leases = await axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/leasing/active/' + process.env.NODE_ADDRESS)
+    const leases = await axios.get('https://' + process.env.NODE_IP + '/leasing/active/' + process.env.NODE_ADDRESS)
 
     // Loop through each detected lease
     leases.data.forEach(lease => {

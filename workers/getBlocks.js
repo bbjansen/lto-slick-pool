@@ -24,7 +24,7 @@ async function getBlocks() {
     let lastIndex = 0
 
     // Grab the network height and last scanned height
-    blockIndex = await axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/blocks/height')
+    blockIndex = await axios.get('https://' + process.env.NODE_IP + '/blocks/height')
     lastIndex = await db('status').select('scanIndex').limit(1)
 
     //Calculate heightDiff
@@ -58,7 +58,7 @@ async function getBlocks() {
     const newScanIndex = (lastIndex[0].scanIndex + blockCount)
     
     // Scan for new blocks starting at the last recorded block index (scanIndex)
-    const blocks = await axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + lastIndex[0].scanIndex + '/' + newScanIndex)
+    const blocks = await axios.get('https://' + process.env.NODE_IP + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + lastIndex[0].scanIndex + '/' + newScanIndex)
 
     // Loop through each detected block
     blocks.data.forEach(block => {

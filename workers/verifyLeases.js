@@ -27,13 +27,13 @@ async function verifyLeases() {
     .where('active', true)
 
     // Get current height
-    const blockIndex = await axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/blocks/height')
+    const blockIndex = await axios.get('https://' + process.env.NODE_IP + '/blocks/height')
 
     // Loop through each logged lease
     leases.forEach(lease => {
 
       // Check tx info from the network
-      axios.get('http://' + process.env.NODE_IP + ':' + process.env.NODE_PORT + '/transactions/info/' + lease.tid)
+      axios.get('https://' + process.env.NODE_IP + '/transactions/info/' + lease.tid)
       .then(tx => {
 
         // Can't hurt to double check :)
