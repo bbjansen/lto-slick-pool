@@ -13,7 +13,6 @@ const Compression = require('compression')
 const favicon = require('serve-favicon')
 const path = require('path')
 const logger = require('morgan')
-const validator = require('express-validator')
 
 // Setup DB if not exist
 require('./utils/db/schema')
@@ -22,9 +21,6 @@ app.use(function (req, res, next) {
   res.locals.session = req.session
   return next()
 })
-
-// Set Validator
-app.use(validator())
 
 // Compress
 app.use(Helmet())
