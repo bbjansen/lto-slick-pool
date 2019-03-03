@@ -1,0 +1,61 @@
+html
+	include ../includes/header.pug
+
+	body
+		include ../includes/nav.pug
+
+		.hero-body
+			// Step One
+			.container(style='margin-top:60px;')
+				.content
+					h1.title.is-size-2 Step 1
+					h3.subtitle.is-size-4 Register an account with the official LTO web wallet at <a href='https://wallet.lto.network/create-account'>wallet.lto.network</a>.
+
+			section.hero.is-light(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						figure
+							img(src='/img/get-started-one.png')
+
+			section.hero.is-primary(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						p.is-size-4 Once you have registered an account send your LTO to its associated address. If you purchased LTO from an exchange, you will have to convert the ERC20 token, which resides on the Ethereum network, to the LTO main network using the <a href='https://medium.com/ltonetwork/lto-erc-20-mainnet-waves-ce2dd4cd6db6'><b>Toll Bridge</b></a> in the LTO web wallet.
+
+
+			// Step Two
+			.container(style='margin-top:60px;')
+				.content
+					h1.title.is-size-2 Step 2
+					h3.subtitle.is-size-4 Navigate to the leasing section in the LTO web wallet.
+
+			section.hero.is-light(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						figure
+							img(src='/img/get-started-two.png')
+
+			section.hero.is-primary(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						p.is-size-4 Head over to <b>Leasing</b> in the navigation in the LTO web wallet and click the purple button <b>Start lease</b> on the right.
+
+
+			// Step Three
+			.container(style='margin-top:60px;')
+				.content
+					h1.title.is-size-2 Step 3
+					h3.subtitle.is-size-4 Initiate the lease to <span style='color: #14a789;'>3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU</span>
+
+			section.hero.is-light(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						figure
+							img(src='/img/get-started-three.png')
+
+			section.hero.is-primary(style='padding:20px;')
+				.container.has-text-centered
+					.content
+						p.is-size-4 Choose the amount you want to lease. The more you stake, the higher the returns. The recipient address must be <span style='color: #14a789;'>3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU</span>. Your lease will get activated once a 1000 blocks has passed on the LTO Network. You can view the height you started your lease at by looking up your address on the homepage.
+
+		include ../includes/footer.pug

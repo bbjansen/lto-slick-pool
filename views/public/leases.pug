@@ -1,0 +1,16 @@
+
+html
+	include ../includes/header.pug
+
+	body
+		include ../includes/nav.pug
+
+		.hero-body
+			section.notification.is-light(style='padding: 40px;')
+				.container
+					.content
+						h1.title.is-size-2 Leases
+						div#leasesHistory
+						
+		include ../includes/footer.pug
+		script(src='/js/leases.js')

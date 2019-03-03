@@ -1,0 +1,54 @@
+html
+	include ../includes/header.pug
+
+	body
+		include ../includes/nav.pug
+
+		.hero-body
+			section.hero.is-light(style='padding: 40px 20px 20px 20px;')
+				.container
+					.content
+						.columns
+							.column.is-three-fifths
+								h1.title.is-size-1(style='line-height:1.5;') Stake LTO
+								h1.subtitle.is-size-2.has-text-weight-light.has-background-white(style='line-height:1.4;padding:15px;')
+									| Earn LTO by leasing out your LTO via the official web wallet.
+							
+							.column.is-two-fifths
+								ul.is-size-3
+									li <b>hourly</b> payouts*
+									li <b>3%</b> fee
+									li <b>live</b> statistics
+									li <b>99.99%</b> uptime
+								p *when total unpaid has reached #{payout} LTO.
+			.container(style='padding:20px 0 20px 0;')
+				.level
+					.level-left
+						a.button.is-large.is-primary.is-outlined(href='/get-started' style='font-size:1.8em;')
+							span.icon.is-large
+								i.icon-rocket
+							span Get Started
+					.level-right
+						input.input.is-large.is-primary.is-outlined.is-fullwidth(onchange='getStats(this.value)' placeholder='Enter LTO Address' value=address style='font-size:1.8em;min-width:600px;')
+
+			section.notification.is-light#stats
+				.container
+					.content
+						.columns.has-text-centered.is-size-3
+							.column
+								h1.subtitle.is-size-3 Paid
+								button.button.is-outlined.is-large.is-primary(id='totalPaid' style='cursor:default;' disabled)
+							.column
+								h1.subtitle.is-size-3 Unpaid
+								button.button.is-outlined.is-large.is-primary(id='totalUnpaid' style='cursor:default;' disabled)
+
+						h1.title.is-size-3 Leases
+						div#statsLeases
+
+						br
+
+						h1.title.is-size-3 Payments
+						div#statsPayments
+						
+		include ../includes/footer.pug
+		script(src='/js/index.js')

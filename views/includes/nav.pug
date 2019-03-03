@@ -1,0 +1,49 @@
+nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navigation')
+    .container
+        .navbar-brand
+            a.navbar-item.is-size-4.has-text-weight-light.has-background-white.has-text-dark(href='/')
+                div(style='background-image:url("/img/logo.png");background-repeat:no-repeat;background-position:left;padding: 0 0 0 48px;')
+                    | LTO Services
+            span.navbar-burger.burger(data-target='navbarMenu')
+                span
+                span
+                span
+        #navbarMenu.navbar-menu
+            .navbar-start
+                a.navbar-item(href='/leases' class=title=='Leases'?'is-active':undefined)
+                    span.icon.is-large
+                        i.icon-note.is-size-5
+                    span.is-size-5 Leases
+                    
+                a.navbar-item(href='/blocks' class=title=='Blocks'?'is-active':undefined)
+                    span.icon.is-large
+                        i.icon-layers.is-size-5
+                    span.is-size-5 Blocks
+
+                a.navbar-item(href='/payments' class=title=='Payments'?'is-active':undefined)
+                    span.icon.is-large
+                        i.icon-wallet.is-size-5
+                    span.is-size-5 Payments
+
+                a.navbar-item(href='/get-started' class=title=='Get Started'?'is-active':undefined)
+                    span.icon.is-large
+                        i.icon-question.is-size-5
+                    span.is-size-5 Help
+
+                a.navbar-item(href='/faq' class=title=='FAQ'?'is-active':undefined)
+                    span.icon.is-large
+                        i.icon-magic-wand.is-size-5
+                    span.is-size-5 FAQ
+
+            .navbar-end
+                .navbar-item
+                    .tag.is-medium.is-warning.tooltip.is-tooltip-bottom(data-tooltip='Total Unpaid')#totalAmountUnpaid
+                .navbar-item
+                    .tag.is-medium.is-link.tooltip.is-tooltip-bottom(data-tooltip='Total Paid')#totalAmountPaid         
+                .navbar-item
+                    .tag.is-medium.is-success.tooltip.is-tooltip-bottom(data-tooltip='Total Stake')#totalAmount
+                .navbar-item
+                    .tag.is-medium.is-info.tooltip.is-tooltip-bottom(data-tooltip='Active Leases')#totalLease
+                .navbar-item
+                    .tag.is-medium.is-white.tooltip.is-tooltip-bottom(data-tooltip='Network Height')#blockIndex
+                
