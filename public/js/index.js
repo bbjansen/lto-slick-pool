@@ -1,6 +1,8 @@
 // Initialize Data
 if(address) {
   getStats(address)
+} else {
+  document.getElementById('stats').classList.add('is-hidden')
 }
 
 // Get Homepage Stats

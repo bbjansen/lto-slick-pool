@@ -10,7 +10,7 @@ const cron = require('node-cron')
 
 // Run 10 minutes passed every hour giving enough time for sortPayments.js
 cron.schedule('10 * * * *', () => {
-  processPayments()
+  //processPayments()
 })
 
 // Scans for verified blocks in the DB that have no been paid out yet on
