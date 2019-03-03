@@ -1,6 +1,6 @@
 {
-  "name": "ts-api-dashboard",
-  "version": "0.9.0",
+  "name": "lto-service",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
