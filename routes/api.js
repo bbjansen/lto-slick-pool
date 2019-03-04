@@ -76,8 +76,8 @@ router.get('/lease/:address', async function(req, res, next) {
       leases: getLeases,
       payments: getPayments,
       stats: {
-        paid: getPaid[0].sum,
-        unpaid: getUnpaid[0].sum
+        paid: getPaid[0].sum || 0,
+        unpaid: getUnpaid[0].sum || 0
       }
     })
   } catch (err) {
