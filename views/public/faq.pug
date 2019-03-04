@@ -8,6 +8,15 @@ html
 		.hero-body
 			.container(style='margin-top:60px;')
 				.content
+					h1.title.is-size-2 What is 'Leasing'?
+
+
+			section.hero.is-light(style='padding:20px;')
+				.container.is-size-4
+					.content
+						p.has-text-left Leasing is a trustless process in where the leaser delegates LTO tokens towards a block producer by creating a lease transaction. The lease can be canceled at anytime by the leaser and the LTO tokens become available instantly again for use. By leasing your LTO tokens towards a block producer, essentially you earn interest like putting your money in a bank. However, the interest that is earned involves luck and thus will vary. See it as a lottery, where your LTO are lottery tickets; the more tickets, the higher the odds of winning are.
+			.container(style='margin-top:60px;')
+				.content
 					h1.title.is-size-2 How are the payouts calculated?
 
 			section.hero.is-light(style='padding:20px;')
@@ -27,4 +36,5 @@ html
 						br
 						p.has-text-left Every hour LTO.Services checks if the minimum payout limit of <b>#{payout}</b> LTO has been reached. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly. The fee of the mass calculation uses the following formula:
 						code.has-text-centered massTxFee = 0.25 + (0.10 * n of transactions)
+		
 		include ../includes/footer.pug
