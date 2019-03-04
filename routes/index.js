@@ -10,7 +10,7 @@ const router = express.Router()
 router.get('/', async function(req, res, next) {
   try {
     res.render('public', {
-      title: 'Stake LTO',
+      title: 'Lease LTO',
       address: req.cookies.address || null,
       payout: process.env.PAYOUT
     })
