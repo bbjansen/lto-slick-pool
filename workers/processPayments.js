@@ -57,7 +57,10 @@ async function processPayments() {
         })
 
         // Push each id to track array for later identification
-        track.push(payment.id)
+        track.push({
+          id: payment.id,
+          block: payment.blockIndex
+        })
       })
 
       // Calculate total unpaid 
@@ -89,18 +92,31 @@ async function processPayments() {
 
         console.log('[Payment] [' + tx.data.id +'] broadcasted')
 
-        track.forEach(id => {
+        track.forEach(payment => {
 
           db('payments').update({
             tid: tx.data.id,
             paid: true
           })
-          .where('id', id)
+          .where('id', payment.id)
           .then(d => {
-            console.log('[Payment] [' + id + '] paid')
+            console.log('[Payment] [' + payment.id + '] paid')
           })
           .catch(err => {
             console.log(err)
+          })
+
+          // Mark block as paid
+          db('blocks')
+          .update({
+            paid: true
+          })
+          .where('blockIndex', payment.block)
+          .then(d => {
+            console.log('[Block] [' + payment.block+ '] paid')
+          })
+          .catch(err => {
+            console.log('' + err)
           })
 
         })

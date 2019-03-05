@@ -75,20 +75,6 @@ async function sortPayments() {
             })
           }
         })
-
-        // Mark block as paid
-        db('blocks')
-        .update({
-          paid: true
-        })
-        .where('blockIndex', block.blockIndex)
-        .then(d => {
-          console.log('[Block] [' + block.blockIndex+ '] paid')
-        })
-        .catch(err => {
-          console.log('' + err)
-        })
-
       })
       .catch(err => {
         console.log(err)
