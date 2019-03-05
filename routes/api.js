@@ -20,8 +20,8 @@ router.get('/balance', async function(req, res, next) {
     .where('paid', true)
 
     res.json({
-      totalUnpaid: getTotalUnpaid[0].sum.toFixed(2),
-      totalPaid: getTotalPaid[0].sum.toFixed(2)
+      totalUnpaid: getTotalUnpaid[0].sum.toFixed(2) || 0.00,
+      totalPaid: getTotalPaid[0].sum.toFixed(2) || 0.00
     })
 
   } catch (err) {
@@ -57,7 +57,6 @@ router.get('/lease/:address', async function(req, res, next) {
       payment.timestamp = payment.timestamp.toLocaleString()
     })
 
-
     // Get Payment Stats
 
     const getPaid = await db('payments')
@@ -76,8 +75,8 @@ router.get('/lease/:address', async function(req, res, next) {
       leases: getLeases,
       payments: getPayments,
       stats: {
-        paid: getPaid[0].sum || 0,
-        unpaid: getUnpaid[0].sum || 0
+        paid: getPaid[0].sum || 0.00,
+        unpaid: getUnpaid[0].sum || 0.00
       }
     })
   } catch (err) {
