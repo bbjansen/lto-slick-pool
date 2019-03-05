@@ -113,7 +113,7 @@ Promise.all([balance, leaser, height]).then(function(data) {
   document.getElementById('totalAmountUnpaid').innerText = totalUnpaid.toFixed(2)
   document.getElementById('totalAmountPaid').innerText = totalPaid.toFixed(2)
   document.getElementById('totalAmount').innerText = totalAmount.toFixed(2)
-  document.getElementById('totalLease').innerText = totalLease.toFixed(2)
+  document.getElementById('totalLease').innerText = totalLease
   document.getElementById('blockIndex').innerText = blockIndex
 })
 .catch(function(err) {
