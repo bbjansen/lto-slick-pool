@@ -52,7 +52,7 @@ async function verifyLeases() {
               console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] canceled.')
             })
           } else {
-            console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] active.')
+            //console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] active.')
           }
         } else {
           throw new Error('Conflicting transction ID.')

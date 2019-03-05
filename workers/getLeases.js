@@ -49,7 +49,7 @@ cron.schedule('* * * * *', () => {
 
           //If duplicate
           if(err.errno === 1062) {
-            console.log('[Lease] [' + lease.id + '] [' + lease.height + '] duplicate.')
+            //console.log('[Lease] [' + lease.id + '] [' + lease.height + '] duplicate.')
           } else {
             console.log('' + err)
           }
