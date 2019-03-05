@@ -110,9 +110,18 @@ Promise.all([balance, leaser, height]).then(function(data) {
     totalAmount += totalAmountArray[i]
   }
 
-  document.getElementById('totalAmountUnpaid').innerText = totalUnpaid.toFixed(2)
-  document.getElementById('totalAmountPaid').innerText = totalPaid.toFixed(2)
-  document.getElementById('totalAmount').innerText = totalAmount.toFixed(2)
+  document.getElementById('totalAmountUnpaid').innerText = totalUnpaid.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+  document.getElementById('totalAmountPaid').innerText = totalPaid.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+  document.getElementById('totalAmount').innerText = totalAmount.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
   document.getElementById('totalLease').innerText = totalLease
   document.getElementById('blockIndex').innerText = blockIndex
 })
