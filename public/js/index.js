@@ -60,8 +60,8 @@ function getStats(address) {
               }
             }
           },
-          { title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function(row) {
-            return row._cell.value.toLocaleString()
+          { title: 'Timestamp', field: 'timestamp', align: 'center', formatter: function(row) {
+            return moment(row._cell.value).fromNow()
           }},
         ]
       })
@@ -88,8 +88,8 @@ function getStats(address) {
             })
           }},
           { title: 'Block', field: 'blockIndex', align: 'left' },
-          { title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function(row) {
-            return row._cell.value.toLocaleString()
+          { title: 'Timestamp', field: 'timestamp', align: 'center', formatter: function(row) {
+            return moment(row._cell.value).fromNow()
           }},
         ]
       })
