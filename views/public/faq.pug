@@ -43,6 +43,8 @@ html
 					.content
 						p.has-text-left Payouts are handled automatically by LTO Services every 24 hours and will only be executed if the sum of all unpaid block rewards is equal or greater than the set minimum payout limit of <b>#{payout}</b> LTO. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly to your lease address. The fee for the mass transaction is currently covered by LTO Services and is calculated using the following formula:
 						code.has-text-centered massTxFee = 0.25 + (0.10 * n of transactions)
-						p.has-text-left Please note that he minimum payout limit may be altered in order to reflect the current LTO network node environment in order to achieve minimum fees on mass transactions.
+						br
+						br
+						p.has-text-left Please note that he minimum payout limit may be altered in order to reflect the current LTO network node environment in order to achieve minimum fees on mass transactions. The current unpaid pool sum is located in the top-right corner of the website, highlighted in orange.
 
 		include ../includes/footer.pug
