@@ -11,8 +11,8 @@ const db = require('../utils/utils').knex
 router.get('/balance', async function(req, res, next) {
   try {
 
-    const getTotalUnpaid = await db('payments')
-    .sum('amount as sum')
+    const getTotalUnpaid = await db('rewards')
+    .sum('reward as sum')
     .where('paid', false)
 
     const getTotalPaid = await db('payments')
