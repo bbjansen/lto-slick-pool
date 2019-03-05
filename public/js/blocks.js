@@ -29,8 +29,18 @@ function getBlocks() {
               url: function (row) { return 'https://explorer.lto.network/blocks/' + row._cell.value }
             }
           },
-          { title: 'Fee', field: 'fee', align: 'left' },
-          { title: 'Reward', field: 'reward', align: 'left' },
+          { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
+          { title: 'Reward', field: 'reward', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
           {
             title: 'Verified', field: 'verified', align: 'center', formatter: function (row) {
               if(row._cell.value === 1) {
@@ -49,7 +59,9 @@ function getBlocks() {
               }
             }
           },
-          { title: 'Timestamp', field: 'timestamp', align: 'right' }
+          { title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function(row) {
+            return row._cell.value.toLocaleString()
+          }},
         ]
       })
     }

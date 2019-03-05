@@ -34,8 +34,18 @@ function getLeases(address) {
               url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
             }
           },
-          { title: 'Amount', field: 'amount', align: 'left' },
-          { title: 'Fee', field: 'fee', align: 'left' },
+          { title: 'Amount', field: 'amount', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
+          { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
           { title: 'Block', field: 'start', align: 'left' },
           {
             title: 'Status', field: 'active', align: 'center', formatter: function (row) {
@@ -46,7 +56,9 @@ function getLeases(address) {
               }
             }
           },
-          { title: 'Timestamp', field: 'timestamp', align: 'right' }
+          { title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function(row) {
+            return row._cell.value.toLocaleString()
+          }},
         ]
       })
     }

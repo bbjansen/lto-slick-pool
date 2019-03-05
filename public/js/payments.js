@@ -44,7 +44,12 @@ function getPayments() {
               }
             }
           },
-          { title: 'Amount', field: 'amount', align: 'left' },
+          { title: 'Amount', field: 'amount', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
           { title: 'Block', field: 'blockIndex', align: 'left' },
           {
             title: 'Paid', field: 'paid', align: 'center', formatter: function (row) {
@@ -56,14 +61,9 @@ function getPayments() {
             }
           },
           {
-            title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function (row) {
-              if(row._cell.value === '1970-1-1 01:00:00') {
-                return 'N/A'
-              } else {
-                return row._cell.value
-              }
-            }
-          },
+          title: 'Timestamp', field: 'timestamp', align: 'right', formatter: function(row) {
+            return row._cell.value.toLocaleString()
+          }},
         ]
       })
 

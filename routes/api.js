@@ -20,8 +20,8 @@ router.get('/balance', async function(req, res, next) {
     .where('paid', true)
 
     res.json({
-      totalUnpaid: getTotalUnpaid[0].sum.toFixed(2) || 0.00,
-      totalPaid: getTotalPaid[0].sum.toFixed(2) || 0.00
+      totalUnpaid: getTotalUnpaid[0].sum || 0,
+      totalPaid: getTotalPaid[0].sum || 0
     })
 
   } catch (err) {
@@ -38,10 +38,8 @@ router.get('/lease/:address', async function(req, res, next) {
     .where('address', req.params.address)
 
     getLeases.forEach(function(lease) {
-      lease.amount = lease.amount.toFixed(2)
-      lease.fee = lease.fee.toFixed(2)
       lease.timestamp = new Date(lease.timestamp)
-      lease.timestamp = lease.timestamp.toLocaleString()
+      lease.timestamp = lease.timestamp
     })
 
     // Get Payments
@@ -52,9 +50,8 @@ router.get('/lease/:address', async function(req, res, next) {
     .where('paid', true)
 
     getPayments.forEach(function(payment) {
-      payment.amount = payment.amount.toFixed(2)
       payment.timestamp = new Date(payment.timestamp)
-      payment.timestamp = payment.timestamp.toLocaleString()
+      payment.timestamp = payment.timestamp
     })
 
     // Get Payment Stats
@@ -94,10 +91,8 @@ router.get('/leases', async function(req, res, next) {
     .orderBy('timestamp', 'desc')
 
     getLeases.forEach(function(lease) {
-      lease.amount = lease.amount.toFixed(2)
-      lease.fee = lease.fee.toFixed(2)
       lease.timestamp = new Date(lease.timestamp)
-      lease.timestamp = lease.timestamp.toLocaleString()
+      lease.timestamp = lease.timestamp
     })
 
     res.json(getLeases)
@@ -116,14 +111,8 @@ router.get('/blocks', async function(req, res, next) {
     .orderBy('timestamp', 'desc')
 
     getBlocks.forEach(function(block) {
-      block.fee = block.fee.toFixed(2)
-      if(block.reward) {
-        block.reward = block.reward.toFixed(2)
-      } else {
-        block.reward = '.........'
-      }
       block.timestamp = new Date(block.timestamp)
-      block.timestamp = block.timestamp.toLocaleString()
+      block.timestamp = block.timestamp
     })
 
     res.json(getBlocks)
@@ -144,9 +133,8 @@ router.get('/payments', async function(req, res, next) {
     .orderBy('payments.blockIndex', 'desc')
 
     getPayments.forEach(function(payment) {
-      payment.amount = payment.amount.toFixed(2)
       payment.timestamp = new Date(payment.timestamp)
-      payment.timestamp = payment.timestamp.toLocaleString()
+      payment.timestamp = payment.timestamp
     })
 
     res.json(getPayments)
