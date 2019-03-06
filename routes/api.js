@@ -45,9 +45,8 @@ router.get('/lease/:address', async function(req, res, next) {
     // Get Payments
     const getPayments = await db('payments')
     .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .select('payments.id', 'payments.tid', 'payments.amount', 'payments.blockIndex', 'payments.paid', 'payments.timestamp')
+    .select('payments.id', 'payments.blockIndex', 'payments.tid', 'leases.address', 'payments.amount', 'payments.fee', 'payments.confirmed', 'payments.timestamp')
     .where('leases.address', req.params.address)
-    .where('paid', true)
 
     getPayments.forEach(function(payment) {
       payment.timestamp = new Date(payment.timestamp)
@@ -56,15 +55,15 @@ router.get('/lease/:address', async function(req, res, next) {
 
     // Get Payment Stats
 
-    const getPaid = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .sum('payments.amount as sum')
+    const getPaid = await db('rewards')
+    .leftJoin('leases', 'rewards.lid', 'leases.tid')
+    .sum('rewards.amount as sum')
     .where('leases.address', req.params.address)
     .where('paid', true)
 
-    const getUnpaid = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .sum('payments.amount as sum')
+    const getUnpaid = await db('rewards')
+    .leftJoin('leases', 'rewards.lid', 'leases.tid')
+    .sum('rewards.amount as sum')
     .where('leases.address', req.params.address)
     .where('paid', false)
 
