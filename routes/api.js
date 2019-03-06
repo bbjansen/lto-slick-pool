@@ -59,14 +59,14 @@ router.get('/lease/:address', async function(req, res, next) {
     .leftJoin('leases', 'rewards.lid', 'leases.tid')
     .sum('rewards.amount as sum')
     .where('leases.address', req.params.address)
-    .where('paid', true)
+    .where('rewards.paid', true)
 
     const getUnpaid = await db('rewards')
     .leftJoin('leases', 'rewards.lid', 'leases.tid')
     .sum('rewards.amount as sum')
     .where('leases.address', req.params.address)
-    .where('paid', false)
-
+    .where('rewards.paid', false)
+    
     res.json({
       leases: getLeases,
       payments: getPayments,
