@@ -44,12 +44,12 @@ app.use('/api/', require('./routes/api'))
 // Workers
 require('./workers/getBlocks')
 require('./workers/verifyBlocks')
+require('./workers/processBlocks')
 
 require('./workers/getLeases')
 require('./workers/verifyLeases')
 
-require('./workers/sortPayments')
-require('./workers/processPayments')
+//require('./workers/processRewards')
 
 // error handler
 app.use(function onError (err, req, res, next) {

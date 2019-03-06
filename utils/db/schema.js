@@ -32,20 +32,38 @@ db.schema.hasTable('blocks').then(function (exists) {
       table.boolean('verified').defaultTo(false)
       table.decimal('reward', [8, 25])
       table.boolean('paid').defaultTo(false)
+      table.boolean('processed').defaultTo(false)
     })
   }
 })
+
+// Create 'rewards' table if it does not exist
+db.schema.hasTable('rewards').then(function (exists) {
+  if (!exists) {
+    return db.schema.createTable('rewards', function (table) {
+      table.uuid('id').unique().notNullable()
+      table.string('lid').notNullable()
+      table.uuid('pid')
+      table.decimal('amount', [8, 25]).notNullable()
+      table.boolean('paid').defaultTo(false)
+      table.integer('blockIndex').notNullable()
+      table.datetime('created').defaultTo(db.fn.now())
+    })
+  }
+})
+
 
 // Create 'payments' table if it does not exist
 db.schema.hasTable('payments').then(function (exists) {
   if (!exists) {
     return db.schema.createTable('payments', function (table) {
       table.uuid('id').unique().notNullable()
-      table.integer('blockIndex')
       table.string('lid').notNullable()
       table.string('tid')
       table.decimal('amount', [8, 25]).notNullable()
-      table.boolean('paid').defaultTo(false)
+      table.decimal('fee', [8, 25]).notNullable()
+      table.boolean('confirmed').defaultTo(false)
+      table.integer('blockIndex')
       table.bigInteger('timestamp').notNullable()
       table.datetime('created').defaultTo(db.fn.now())
     })

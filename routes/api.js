@@ -17,7 +17,7 @@ router.get('/balance', async function(req, res, next) {
 
     const getTotalPaid = await db('payments')
     .sum('amount as sum')
-    .where('paid', true)
+    .where('confirmed', true)
 
     res.json({
       totalUnpaid: getTotalUnpaid[0].sum || 0,
@@ -129,7 +129,7 @@ router.get('/payments', async function(req, res, next) {
 
     const getPayments = await db('payments')
     .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .select('payments.id', 'payments.blockIndex', 'payments.tid', 'leases.address', 'payments.amount', 'payments.timestamp', 'payments.paid')
+    .select('payments.id', 'payments.blockIndex', 'payments.tid', 'leases.address', 'payments.amount', 'payments.fee', 'payments.confirmed', 'payments.timestamp')
     .orderBy('payments.blockIndex', 'desc')
 
     getPayments.forEach(function(payment) {

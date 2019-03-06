@@ -23,10 +23,8 @@ function getPayments() {
         resizableColumns: true,
         pagination: 'local',
         paginationSize: 15,
-        initialSort: [{ column:'blockIndex', dir: 'desc' }],
+        initialSort: [{ column:'timestamp', dir: 'desc' }],
         columns: [{
-            title: 'ID', field: 'id', align: 'left' },
-          {
             title: 'ID', field: 'tid', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) {
                 if(row._cell.value === null) {
@@ -51,13 +49,18 @@ function getPayments() {
               maximumFractionDigits: 2
             })
           }},
-          { title: 'Block', field: 'blockIndex', align: 'left' },
+          { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
+          }},
           {
-            title: 'Paid', field: 'paid', align: 'center', formatter: function (row) {
+            title: 'Confirmed', field: 'confirmed', align: 'center', formatter: function (row) {
               if(row._cell.value === 1) {
-                return '<div class="tag is-success is-medium" style="width:80px;">paid</div>'
+                return '<div class="tag is-success is-medium" style="width:80px;">yes</div>'
               } else {
-                return '<div class="tag is-warning is-medium" style="width:80px;">unpaid</div>'
+                return '<div class="tag is-warning is-medium" style="width:80px;">no</div>'
               }
             }
           },

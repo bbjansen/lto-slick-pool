@@ -8,17 +8,16 @@ const db = require('../utils/utils').knex
 const axios = require('axios')
 const cron = require('node-cron')
 
-// Run 10 minutes passed every hour giving enough time for sortPayments.js
-cron.schedule('10 * * * *', () => {
-  processPayments()
+// Run every midnight
+cron.schedule('0 0 * * *', () => {
+  processRewards()
 })
 
-// Scans for verified blocks in the DB that have no been paid out yet on
-// a defined interval. It takes all addresses in the DB who had an active 
-// lease at the time of the produced block and calculates its earned share
-// based on the defined parameter in the .env
+// Scans for rewards in the DB that have no been paid out yet on a defined
+// interval grouped by the lease ID and takes the sum of the total rewards.
+// This data is used to create a mass transaction to payout the rewards.
 
-async function processPayments() {
+async function processRewards() {
   try {
     // Fetch 100 (lto network pussy limit) unpaid payments,
     const getPayments = await db('payments')
