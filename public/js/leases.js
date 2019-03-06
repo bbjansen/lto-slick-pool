@@ -20,17 +20,18 @@ function getLeases(address) {
         layout: 'fitColumns',
         responsiveLayout: 'hide',
         autoResize: true,
+        resizableColumns: true,
         pagination: 'local',
         paginationSize: 15,
         initialSort: [{ column:'blockIndex', dir:'desc' }],
         columns: [
           {
-            title: 'ID', field: 'tid', width: 400, align: 'left', formatter: 'link', formatterParams: {
+            title: 'ID', field: 'tid', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) { return 'https://explorer.lto.network/transactions/' + row._cell.value }
             }
           },
           {
-            title: 'Address', field: 'address', width: 300, align: 'left', formatter: 'link', formatterParams: {
+            title: 'Address', field: 'address', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
             }
           },

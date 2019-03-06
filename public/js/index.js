@@ -30,11 +30,12 @@ function getStats(address) {
         layout: 'fitColumns',
         responsiveLayout: 'hide',
         autoResize: true,
+        resizableColumns: true,
         pagination: 'local',
         paginationSize: 10,
         initialSort: [{ column:'timestamp', dir:'desc' }],
         columns: [{
-            title: 'ID', field: 'tid', width: 400, align: 'left', formatter: 'link', formatterParams: {
+            title: 'ID', field: 'tid', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) { return 'https://explorer.lto.network/transactions/' + row._cell.value }
             }
           },
@@ -71,13 +72,14 @@ function getStats(address) {
         layout: 'fitColumns',
         responsiveLayout: 'hide',
         autoResize: true,
+        resizableColumns: true,
         pagination: 'local',
         paginationSize: 10,
         initialSort: [{ column:'id', dir: 'desc' }],
         columns: [{
-            title: 'ID', field: 'id', width: 350, align: 'left' },
+            title: 'ID', field: 'id', align: 'left' },
           {
-            title: 'ID', field: 'tid', width: 400, align: 'left', formatter: 'link', formatterParams: {
+            title: 'ID', field: 'tid', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) { return 'https://explorer.lto.network/transactions/' + row._cell.value }
             }
           },

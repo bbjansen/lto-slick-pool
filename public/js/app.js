@@ -90,17 +90,23 @@ const leaser = fetch(ip + 'leasing/active/' + nodeAddress).then(function(resp) {
   return resp.json()
 })
 
+const blocks = fetch('/api/blocks').then(function(resp) { 
+  return resp.json()
+})
+
 const height = fetch(ip + 'blocks/height').then(function(resp) {
   return resp.json()
 })
 
-Promise.all([balance, leaser, height]).then(function(data) {
+Promise.all([balance, leaser, blocks, height]).then(function(data) {
 
   var totalUnpaid = data[0].totalUnpaid
   var totalPaid =  data[0].totalPaid
 
-  var blockIndex = data[2].height
   var totalLease = data[1].length
+  var totalBlocks = data[2].length
+  var blockIndex = data[3].height
+
   var totalAmount = 0
   var totalAmountArray = data[1].map(function(i) {
     return i.amount / atomicNumber
@@ -123,6 +129,7 @@ Promise.all([balance, leaser, height]).then(function(data) {
     maximumFractionDigits: 2
   })
   document.getElementById('totalLease').innerText = totalLease
+  document.getElementById('totalBlocks').innerText = totalBlocks
   document.getElementById('blockIndex').innerText = blockIndex
 })
 .catch(function(err) {

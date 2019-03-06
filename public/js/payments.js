@@ -20,13 +20,14 @@ function getPayments() {
         layout: 'fitColumns',
         responsiveLayout: 'hide',
         autoResize: true,
+        resizableColumns: true,
         pagination: 'local',
         paginationSize: 15,
         initialSort: [{ column:'blockIndex', dir: 'desc' }],
         columns: [{
-            title: 'ID', field: 'id', width: 300, align: 'left' },
+            title: 'ID', field: 'id', align: 'left' },
           {
-            title: 'ID', field: 'tid', width: 400, align: 'left', formatter: 'link', formatterParams: {
+            title: 'ID', field: 'tid', align: 'left', formatter: 'link', formatterParams: {
               url: function (row) {
                 if(row._cell.value === null) {
                   return ''
