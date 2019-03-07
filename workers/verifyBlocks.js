@@ -31,7 +31,7 @@ async function verifyBlocks() {
       // Calculate if 90 minutes have passed. This is the 'timeout' for a tx in
       // the LTO networks mempool so why not base it on this
 
-      var duration = moment.duration(moment().diff(moment(block.timestamp))).asMinutes()
+      let duration = moment.duration(moment().diff(moment(block.timestamp))).asMinutes()
 
       if(duration >= 90) {
 

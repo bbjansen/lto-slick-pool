@@ -57,7 +57,6 @@ app.use(function onError (err, req, res, next) {
   console.log(err)
 
   // set locals, only providing error in development
-  res.locals.message = err.message
   res.locals.error = process.env.DEBUG == true ? err : {}
   res.statusCode = err.status || 500
 

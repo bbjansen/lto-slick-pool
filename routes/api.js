@@ -28,6 +28,7 @@ router.get('/balance', async function(req, res, next) {
     res.json(null)
   }
 })
+
 // Get Stats
 router.get('/lease/:address', async function(req, res, next) {
   try {
