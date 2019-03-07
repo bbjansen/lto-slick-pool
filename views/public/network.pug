@@ -9,12 +9,15 @@ html
 			section.notification.is-light(style='padding: 40px;')
 				.container
 					.content
-						h1.title.is-size-2 Network Distribution
 
 						.columns
 							.column
 								#blockProducers
-							.column.is-marginless.is-paddingless(style='display: flex; align-items: center;')
+							//.column.is-marginless.is-paddingless(style='display: flex; align-items: center;')
+							.column.is-marginless.is-paddingless.has-text-centered
+								h1.title.is-size-2 Network Distribution
+								br
+								br
 								canvas#chart
 								
 						#test.has-text-right <b>Data:</b>  list of generators for the past 24 hours taken from <a href='https://dev.pywaves.org/LTO/generators/'>pywaves.org</a>.
