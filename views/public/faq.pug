@@ -41,7 +41,7 @@ html
 			section.hero.is-light(style='padding:20px;')
 				.container.is-size-4
 					.content
-						p.has-text-left Payouts are handled automatically by LTO Services every 24 hours and will only be executed if the sum of all unpaid block rewards is equal or greater than the set minimum payout limit of #{payout} LTO. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly to your lease address. The fee for the mass transaction is currently covered by LTO Services and is calculated using the following formula:
+						p.has-text-left Payouts are handled automatically by LTO Services every 24 hours and will only be executed if the sum of all unpaid block rewards is equal or greater than the set minimum <b>total</b>payout limit of #{payout} LTO. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly to your lease address. The fee for the mass transaction is currently covered by LTO Services and is calculated using the following formula:
 						code.has-text-centered massTxFee = 0.25 + (0.10 * n of transactions)
 						br
 						br
