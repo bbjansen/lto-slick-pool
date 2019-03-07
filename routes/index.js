@@ -77,6 +77,17 @@ router.get('/payments', async function(req, res, next) {
   }
 })
 
+// Network
+router.get('/network', async function(req, res, next) {
+  try {
+    res.render('public/network', {
+      title: 'Network'
+    })
+  } catch (err) {
+    next(err)
+  }
+})
+
 // Get Started
 router.get('/status', async function(req, res, next) {
   try {

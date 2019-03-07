@@ -64,11 +64,12 @@ async function processBlocks() {
         }
       })
 
-      // Store calculated payments
+      // Loop through each payment
       rewardedLeases.forEach(lease => {
 
         let id = uuid()
 
+        // Store calculated payments
         db('rewards')
         .insert({
           id: id,
