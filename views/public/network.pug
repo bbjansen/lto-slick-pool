@@ -10,13 +10,27 @@ html
 			section.notification.is-light(style='padding: 40px;')
 				.container
 					.content
+						h1.title.is-size-2 Latest Blocks
+						.columns
+							.column
+								#blockTable
+							.column
+								div(style='width: 100%;height:auto;')
+									canvas#blockChart
+ 
+						h1.title.is-size-2  Mempool <span class='tag is-dark is-large' id='mempoolCount'>0</a>
+						.columns
+							.column
+								#txTable
+
+
+						h1.title.is-size-2 Block Producers <span class='tag is-dark is-large' id='nodeCount'>0</a>
 
 						.columns
 							.column
 								#blockProducers
 							//.column.is-marginless.is-paddingless(style='display: flex; align-items: center;')
 							.column.is-marginless.is-paddingless.has-text-centered
-								h1.title.is-size-2 Network Distribution
 								br
 								br
 								canvas#chart

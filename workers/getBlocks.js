@@ -43,8 +43,8 @@ async function getBlocks() {
       blockCount = 25
     } else if (heightDiff > 10) {
       blockCount = 10
-    } else if (heightDiff > 3) {
-      blockCount = 3
+    } else if (heightDiff > 5) {
+      blockCount = 5
     } else {
       blockCount = 1
     }

@@ -36,6 +36,15 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
                             i.icon-wrench.is-size-5
                         span.is-size-5 Tools
                     #moreDropdown.navbar-dropdown
+                        a.navbar-item(href='/network')
+                            span
+                                span.icon.has-text-primary
+                                    i.icon-organization
+                                strong.is-size-6 Network Dashboard
+                                br
+                                | Live visual data on the LTO Network.
+
+                        hr.navbar-divider
                         a.navbar-item(href='/get-started')
                             span
                                 span.icon.has-text-primary
@@ -43,15 +52,6 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
                                 strong.is-size-6 Getting Started
                                 br
                                 | A simple guide to help you setup your lease.
-                        hr.navbar-divider
-
-                        a.navbar-item(href='/network')
-                            span
-                                span.icon.has-text-primary
-                                    i.icon-organization
-                                strong.is-size-6 Network Distribution
-                                br
-                                | Visual data on block producers from past 24 hours.
 
             .navbar-end
                 .navbar-item
