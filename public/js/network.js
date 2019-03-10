@@ -222,7 +222,7 @@ const nodeTable = new Tabulator('#nodeTable', {
   resizableColumns: true,
   pagination: 'local',
   paginationSize: 15,
-  initialSort: [{ column: 'share', dir: 'desc' }],
+  initialSort: [{ column: 'block', dir: 'desc' }],
   columns: [
     { title: 'Producer', field: 'generator', align: 'left', formatter: function(row, formatterParams) {
 
