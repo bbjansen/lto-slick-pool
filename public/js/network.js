@@ -298,12 +298,12 @@ setInterval(function() {
 
 setInterval(function() { 
   getMempool(txTable)
-}, 5000)
+}, 3000)
 
 
 setInterval(function() { 
   getProducers(nodeTable, nodeChart)
-}, 5000)
+}, 30000)
 
 
 getLastBlock(blockTable, blockChart)
