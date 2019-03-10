@@ -123,18 +123,14 @@ const blocks = fetch('/api/blocks').then(function(resp) {
   return resp.json()
 })
 
-const height = fetch(ip + 'blocks/height').then(function(resp) {
-  return resp.json()
-})
 
-Promise.all([balance, leaser, blocks, height]).then(function(data) {
+Promise.all([balance, leaser, blocks]).then(function(data) {
 
   var totalUnpaid = data[0].totalUnpaid
   var totalPaid =  data[0].totalPaid
 
   var totalLease = data[1].length
   var totalBlocks = data[2].length
-  var blockIndex = data[3].height
 
   var totalAmount = 0
   var totalAmountArray = data[1].map(function(i) {

@@ -15,7 +15,7 @@ function getLastBlock(blockTable, blockChart) {
         generator: data[0].generator,
         size: data[0].size,
         count: data[0].count,
-        datetime: data[0].datetime,
+        timestamp: moment(data[0].datetime).fromNow()
       })
       
       // Update Chart
@@ -24,6 +24,9 @@ function getLastBlock(blockTable, blockChart) {
       blockChart.data.datasets[1].data.push(data[0].count)
 
       blockChart.update()
+
+      document.getElementById('blockCount').innerText = data[0].index
+
     }
   })
 }
@@ -36,21 +39,23 @@ function getMempool(txTable) {
     method: 'get'
   })
   .then((resp) => resp.json())
-  .then(function(data) {
+    .then(function(data) {
 
-    // Clear & Update Table
-    txTable.clearData()
+      if(data.length >= 1) {
+        // Clear & Update Table
+        txTable.clearData()
 
-    data.forEach(tx => {
-      txTable.addData({
-        id: tx.id,
-        block: tx.block,
-        fee: tx.fee,
-        sender: tx.sender
-      })
-    })
+        data.forEach(tx => {
+          txTable.addData({
+            id: tx.id,
+            block: tx.block,
+            fee: tx.fee,
+            sender: tx.sender
+          })
+        })
 
-    document.getElementById('mempoolCount').innerText = data.length || 0
+        document.getElementById('mempoolCount').innerText = data.length
+      }
   })
 }
 
@@ -120,7 +125,7 @@ const blockTable = new Tabulator('#blockTable', {
     },
     { title: 'Size', field: 'size', align: 'left'},
     { title: 'Txns', field: 'count', align: 'left'},
-    { title: 'Datetime', field: 'datetime', align: 'left'}
+    { title: 'Timestamp', field: 'timestamp', align: 'left'}
   ]
 })
 
@@ -221,7 +226,7 @@ const nodeTable = new Tabulator('#nodeTable', {
   autoResize: true,
   resizableColumns: true,
   pagination: 'local',
-  paginationSize: 15,
+  paginationSize: 10,
   initialSort: [{ column: 'blocks', dir: 'desc' }],
   columns: [
     { title: 'Producer', field: 'generator', align: 'left', formatter: function(row, formatterParams) {
