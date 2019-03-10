@@ -301,16 +301,16 @@ const nodeChart = new Chart('nodeChart', {
 // Initialize Data
 setInterval(function() { 
   getLastBlock(blockTable, blockChart)
-}, 5000)
+}, 10000)
 
 setInterval(function() { 
   getMempool(txTable)
-}, 3000)
+}, 5000)
 
 
 setInterval(function() { 
   getProducers(nodeTable, nodeChart)
-}, 30000)
+}, 60000)
 
 
 getLastBlock(blockTable, blockChart)
