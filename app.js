@@ -12,6 +12,7 @@ const Helmet = require('helmet')
 const Compression = require('compression')
 const favicon = require('serve-favicon')
 const path = require('path')
+const cors = require('cors')
 const logger = require('morgan')
 
 // Setup DB if not exist
@@ -35,6 +36,17 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
+//Locales
+app.use(function (req, res, next) {
+  res.locals.cacheip = 'http://' + process.env.CACHE_IP
+  return next()
+})
+
+// CORS
+app.use(cors())
+
+
+// Logger
 app.use(logger('dev'))
 
 // Routes
@@ -50,6 +62,9 @@ require('./workers/getLeases')
 require('./workers/verifyLeases')
 
 //require('./workers/processRewards')
+
+
+
 
 // error handler
 app.use(function onError (err, req, res, next) {

@@ -4,22 +4,24 @@ getProducers()
 
 // Get all blocks
 function getProducers() {
-  const xhttp = new XMLHttpRequest()
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      const res = JSON.parse(this.responseText)
 
-      // If data exists...
-      if(res.length >= 1) {
+  fetch(cacheip + '/generator/all/day', {
+    method: 'get'
+  })
+  .then((resp) => resp.json())
+  .then(function(data) {
 
+    // If data exists...
+    if(data.length >= 1) {
         // Intialize Chart
-        const data = res.map((item) => item.share)
-        const labels = res.map((item) => item.name)
+        const rows = data.map((item) => item.share)
+        const labels = data.map((item) => item.label)
+
         const config = {
           type: 'pie',
           data: {
             datasets: [{
-              data: data,
+              data: rows,
               backgroundColor: ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
             }],
             labels: labels
@@ -45,7 +47,7 @@ function getProducers() {
               mode: 'label',
               callbacks: {
                   label: function(item, data) { 
-                      data.labels[item.index] = data.labels[item.index].split("'>").pop().split("</a>")[0]
+                      data.labels[item.index] = data.labels[item.index]                      
                       return (data.labels[item.index] || 'Unknown')  + ': ' + data.datasets[0].data[item.index] + ' %'
                   }
               }
@@ -65,32 +67,42 @@ function getProducers() {
 
         // Intialize Tabulator
         new Tabulator('#blockProducers', {
-          data: res,
+          data: data,
           layout: 'fitColumns',
           responsiveLayout: 'hide',
           autoResize: true,
-          resizableColumns:true,
+          resizableColumns: true,
           pagination: 'local',
           paginationSize: 15,
-          initialSort: [{ column:'share', dir:'desc' }],
+          initialSort: [{ column: 'share', dir: 'desc' }],
           columns: [
-            { title: 'Producer', field: 'name', align: 'left', formatter: function(row) {
-                return row._cell.value || 'Unknown'
+            { title: 'Producer', field: 'generator', align: 'left', formatter: function(row) {  
+              var data = row.getData()
+
+              var res = '<a href=' + data.url + '>' + data.label + '</a>'
+              data.generator = '<a href=https://explorer.lto.network/address/' + data.generator + '>' + data.generator + '</a>'
+
+              if(data.label !== null) {
+                return res
+              } else {
+                return data.generator
+              }
             }},
-            { title: 'Balance', field: 'balance', align: 'left', formatter: function(row) {
+            { title: 'Regular', field: 'regular', align: 'left', formatter: function(row) {
               return row._cell.value.toFixed(2)
             }},
             { title: 'Blocks', field: 'blocks', align: 'left'},
-            { title: 'Earnings', field: 'fees', align: 'left'},
+            { title: 'Earnings', field: 'earnings', align: 'left'},
             { title: 'Share', field: 'share', align: 'left', formatter: function(row) {
               return row._cell.value + ' %'
             }}
           ]
         })
-      }
     }
-  }
 
-  xhttp.open('get', 'https://cors-anywhere.herokuapp.com/http://dev.pywaves.org/LTO/generators/json', true)
-  xhttp.send()
+
+
+  }).catch(function(err) {
+    console.log(err)
+  })
 }
