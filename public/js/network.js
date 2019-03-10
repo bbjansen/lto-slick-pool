@@ -224,9 +224,16 @@ const nodeTable = new Tabulator('#nodeTable', {
   paginationSize: 15,
   initialSort: [{ column: 'share', dir: 'desc' }],
   columns: [
-    { title: 'Producer', field: 'generator', align: 'left', formatter: function(row) {
-      //console.log(row)     
-     
+    { title: 'Producer', field: 'generator', align: 'left', formatter: function(row, formatterParams) {
+
+      if(row.getData().label) {
+        var res = '<a href="' + row.getData().url + '">' + row.getData().label + '</a>'
+      } else {
+        var res = '<a href="https://explorer.lto.network/address/' + row.getValue() + '">' + row.getValue() + '</a>'
+      }
+
+      return res || row.getValue()
+
     }},
     { title: 'Regular', field: 'regular', align: 'left', formatter: function(row) {
       return row._cell.value.toFixed(2)
