@@ -301,7 +301,7 @@ const nodeChart = new Chart('nodeChart', {
 // Initialize Data
 setInterval(function() { 
   getLastBlock(blockTable, blockChart)
-}, 10000)
+}, 7000)
 
 setInterval(function() { 
   getMempool(txTable)
