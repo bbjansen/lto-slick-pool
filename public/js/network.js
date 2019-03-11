@@ -5,23 +5,25 @@ function getLastBlocks(blockTable, blockChart) {
   })
   .then((resp) => resp.json())
   .then(function(data) {
+
+      // Update Table
       data.forEach(block => {
         blockTable.addData({
           index: block.blocks.index,
           generator: block.blocks.generator,
           size: block.blocks.size,
           count: block.blocks.count,
-          timestamp: moment(block.blocks.timestamp).fromNow()
+          timestamp: block.blocks.timestamp
         })
-  
 
         // Update Chart
         blockChart.data.labels.push(block.blocks.timestamp)
         blockChart.data.datasets[0].data.push(block.blocks.size)
-        blockChart.data.datasets[1].data.push(block.blocks.count)
+        blockChart.data.datasets[1].data.push(block.blocks.fee)
+        blockChart.data.datasets[2].data.push(block.consensus.target)
       })
-      blockChart.update()
 
+      blockChart.update()
       document.getElementById('blockCount').innerText = data[0].blocks.index
     
   })
@@ -35,20 +37,7 @@ function getLastBlock(blockTable, blockChart) {
   .then((resp) => resp.json())
   .then(function(data) {
 
-    // Some fuckery that took away 2 hours of my life
-    // When the chart is already populated, for some
-    // reason beyond me it inverses the array hence,
-    // pushing new data too it screws it all up. This
-    // bit of poop + the inverse() below solves it??
-
-
-    let lastInsert
-
-    if(blockChart.data.labels.length <= 10) {
-      lastInsert = blockChart.data.labels[0]
-    } else {
-      lastInsert = blockChart.data.labels.slice(-1)[0]
-    } 
+    lastInsert = blockTable.rowManager.activeRows[0].data.timestamp
 
     // If data exists and is new
     if(blockChart.data && lastInsert !== data.blocks.timestamp) {
@@ -58,18 +47,19 @@ function getLastBlock(blockTable, blockChart) {
         generator: data.blocks.generator,
         size: data.blocks.size,
         count: data.blocks.count,
-        timestamp: moment(data.blocks.timestamp).fromNow()
+        timestamp: data.blocks.timestamp
       })
       
       // Update Chart
-      blockChart.data.labels.reverse().push(data.blocks.timestamp)
-      blockChart.data.datasets[0].data.reverse().push(data.blocks.size)
-      blockChart.data.datasets[1].data.reverse().push(data.blocks.count)
-
+      blockChart.data.labels.unshift(data.blocks.timestamp)
+      blockChart.data.datasets[0].data.unshift(data.blocks.size)
+      blockChart.data.datasets[1].data.unshift(data.blocks.fee)
+      blockChart.data.datasets[2].data.push(block.consensus.target)
       blockChart.update()
-
-      document.getElementById('blockCount').innerText = data.blocks.index
     }
+
+
+    document.getElementById('blockCount').innerText = data.blocks.index
   })
 }
 
@@ -153,7 +143,7 @@ function getProducers(nodeTable, nodeChart) {
 
 
 //Initialize Block Table
-const blockTable = new Tabulator('#blockTable', {
+var blockTable = new Tabulator('#blockTable', {
   data: [],
   layout: 'fitColumns',
   responsiveLayout: 'hide',
@@ -173,12 +163,14 @@ const blockTable = new Tabulator('#blockTable', {
     },
     { title: 'Size', field: 'size', align: 'left'},
     { title: 'Txns', field: 'count', align: 'left'},
-    { title: 'Timestamp', field: 'timestamp', align: 'left'}
+    { title: 'Timestamp', field: 'timestamp', align: 'left', formatter: function(row) {
+      return moment(row._cell.value).fromNow()
+    }}
   ]
 })
 
 // Initialize Block Chart
-const blockChart = new Chart('blockChart', {
+var blockChart = new Chart('blockChart', {
   type: 'bar',
   data: {
     datasets: [{
@@ -189,20 +181,32 @@ const blockChart = new Chart('blockChart', {
       color: 'rgba(142, 68, 173, 0.9)',
       backgroundColor: 'rgba(142, 68, 173, 0.5)',
       fill: true,
-      data: null
+      data: []
     },
     {
-      label: 'Tx',
+      label: 'Fee',
       borderWidth: '3',
       pointRadius: '3',
-      color: 'rgba(40, 171, 191, 0.9)',
+      color: 'rgba(40, 171, 191, 0.7)',
       backgroundColor: 'rgba(40, 171, 191, 1)',
       fill: false,
-      data: null
-    }]
+      stacked: true,
+      data: []
+    },
+    {
+      label: 'Target',
+      borderWidth: '3',
+      pointRadius: '3',
+      color: 'rgba(216, 20, 132, 0.7)',
+      backgroundColor: 'rgba(216, 20, 132, 1)',
+      fill: false,
+      stacked: true,
+      data: []
+    }
+  ]
   },
   options: {
-    //maintainAspectRatio: false,
+    maintainAspectRatio: true,
     responsive: true,
     scales: {
       xAxes: [{
@@ -262,13 +266,22 @@ const blockChart = new Chart('blockChart', {
       xPadding: 15,
       yPadding: 15,
       intersect: false,
-      displayColors: false,
+      displayColors: true,
       cornerRadius: 0,
       backgroundColor: 'rgba(255,255,255,0.9)',
       mode: 'label',
       callbacks: {
           title: function(item, data) {
             return moment(data.labels[item[0].index]).format('hh:mm:ss A')
+          },
+          label: function(item, data) {
+            if (item.datasetIndex === 0) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
+            } else if (item.datasetIndex === 1) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel.toFixed(2) + ' LTO'
+            } else if (item.datasetIndex === 2) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
+            }
           }
       }
     },
@@ -285,7 +298,7 @@ const blockChart = new Chart('blockChart', {
 
 
 //Initialize Mempool Table
-const txTable = new Tabulator('#txTable', {
+var txTable = new Tabulator('#txTable', {
   data: [],
   layout: 'fitColumns',
   responsiveLayout: 'hide',
@@ -312,7 +325,7 @@ const txTable = new Tabulator('#txTable', {
 })
 
 // Intialize Node Table
-const nodeTable = new Tabulator('#nodeTable', {
+var nodeTable = new Tabulator('#nodeTable', {
   data: [],
   layout: 'fitColumns',
   responsiveLayout: 'hide',
@@ -344,7 +357,7 @@ const nodeTable = new Tabulator('#nodeTable', {
   ]
 })
 
-const nodeChart = new Chart('nodeChart', {
+var nodeChart = new Chart('nodeChart', {
   type: 'pie',
   data: {
     datasets: [{
@@ -355,7 +368,7 @@ const nodeChart = new Chart('nodeChart', {
     labels: []
   },
   options: {
-    //maintainAspectRatio: false,
+    maintainAspectRatio: true,
     responsive: true,
     tooltips: {
       bodyFontColor: '#1f1f1f',
@@ -412,3 +425,4 @@ setInterval(function() {
 getLastBlocks(blockTable, blockChart)
 getMempool(txTable)
 getProducers(nodeTable, nodeChart)
+
