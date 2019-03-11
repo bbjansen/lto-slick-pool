@@ -1,30 +1,74 @@
+// Get last few blocks to populate chart and table
+function getLastBlocks(blockTable, blockChart) {
+  fetch(cacheip + '/block/last/10', {
+    method: 'get'
+  })
+  .then((resp) => resp.json())
+  .then(function(data) {
+      data.forEach(block => {
+        blockTable.addData({
+          index: block.blocks.index,
+          generator: block.blocks.generator,
+          size: block.blocks.size,
+          count: block.blocks.count,
+          timestamp: moment(block.blocks.timestamp).fromNow()
+        })
+  
+
+        // Update Chart
+        blockChart.data.labels.push(block.blocks.timestamp)
+        blockChart.data.datasets[0].data.push(block.blocks.size)
+        blockChart.data.datasets[1].data.push(block.blocks.count)
+      })
+      blockChart.update()
+
+      document.getElementById('blockCount').innerText = data[0].blocks.index
+    
+  })
+}
+
 // Get last block and insert into chart/table
 function getLastBlock(blockTable, blockChart) {
-
   fetch(cacheip + '/block/last/', {
     method: 'get'
   })
   .then((resp) => resp.json())
   .then(function(data) {
+
+    // Some fuckery that took away 2 hours of my life
+    // When the chart is already populated, for some
+    // reason beyond me it inverses the array hence,
+    // pushing new data too it screws it all up. This
+    // bit of poop + the inverse() below solves it??
+
+
+    let lastInsert
+
+    if(blockChart.data.labels.length <= 10) {
+      lastInsert = blockChart.data.labels[0]
+    } else {
+      lastInsert = blockChart.data.labels.slice(-1)[0]
+    } 
+
     // If data exists and is new
-    if(blockChart.data && blockChart.data.labels.slice(-1)[0] !== data[0].timestamp) {
+    if(blockChart.data && lastInsert !== data.blocks.timestamp) {
       // Update Table
       blockTable.addData({
-        index: data[0].index,
-        generator: data[0].generator,
-        size: data[0].size,
-        count: data[0].count,
-        timestamp: moment(data[0].timestamp).fromNow()
+        index: data.blocks.index,
+        generator: data.blocks.generator,
+        size: data.blocks.size,
+        count: data.blocks.count,
+        timestamp: moment(data.blocks.timestamp).fromNow()
       })
       
       // Update Chart
-      blockChart.data.labels.push(data[0].timestamp)
-      blockChart.data.datasets[0].data.push(data[0].size)
-      blockChart.data.datasets[1].data.push(data[0].count)
+      blockChart.data.labels.reverse().push(data.blocks.timestamp)
+      blockChart.data.datasets[0].data.reverse().push(data.blocks.size)
+      blockChart.data.datasets[1].data.reverse().push(data.blocks.count)
 
       blockChart.update()
 
-      document.getElementById('blockCount').innerText = data[0].index
+      document.getElementById('blockCount').innerText = data.blocks.index
     }
   })
 }
@@ -135,23 +179,24 @@ const blockTable = new Tabulator('#blockTable', {
 
 // Initialize Block Chart
 const blockChart = new Chart('blockChart', {
-  type: 'line',
+  type: 'bar',
   data: {
     datasets: [{
+      type: 'line',
       label: 'Size',
-      borderWidth: '2',
-      pointRadius: '1',
+      borderWidth: '3',
+      pointRadius: '3',
       color: 'rgba(142, 68, 173, 0.9)',
-      backgroundColor: 'rgba(142, 68, 173, 0.6)',
+      backgroundColor: 'rgba(142, 68, 173, 0.5)',
       fill: true,
       data: null
     },
     {
       label: 'Tx',
-      borderWidth: '2',
+      borderWidth: '3',
       pointRadius: '3',
       color: 'rgba(40, 171, 191, 0.9)',
-      backgroundColor: 'rgba(40, 171, 191, 0.6)',
+      backgroundColor: 'rgba(40, 171, 191, 1)',
       fill: false,
       data: null
     }]
@@ -180,45 +225,25 @@ const blockChart = new Chart('blockChart', {
       }],
       yAxes: [{
         id: 'y-axis-1',
-        type: 'linear',
+        type: 'logarithmic',
         position: 'right',
         ticks: {
-          fontSize: 12,
-          fontColor: '#2f2f2f',
-          fontStyle: 'thin',
-          display: true,
-          mirror: true,
-          beginAtZero: true,
-          min: 0,
-          stepSize: 50,
-          callback: function (value, chart) {
-            return value
-          }
+          display: false,
         },
         gridLines: {
-          display: true,
+          display: false,
           drawBorder: false
         }
       },
       {
         id: 'y-axis-2',
-        type: 'linear',
+        type: 'logarithmic',
         position: 'left',
         ticks: {
-          fontSize: 12,
-          fontColor: '#2f2f2f',
-          fontStyle: 'thin',
-          display: true,
-          mirror: true,
-          beginAtZero: true,
-          min: 0,
-          stepSize: 1,
-          callback: function (value, chart) {
-            return value
-          }
+          display: false,
         },
         gridLines: {
-          display: true,
+          display: false,
           drawBorder: false
         }
       }
@@ -384,6 +409,6 @@ setInterval(function() {
 }, 60000)
 
 
-getLastBlock(blockTable, blockChart)
+getLastBlocks(blockTable, blockChart)
 getMempool(txTable)
 getProducers(nodeTable, nodeChart)
