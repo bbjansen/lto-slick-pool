@@ -6,27 +6,25 @@ function getLastBlock(blockTable, blockChart) {
   })
   .then((resp) => resp.json())
   .then(function(data) {
-
     // If data exists and is new
-    if(blockChart.data && blockChart.data.labels.slice(-1)[0] !== data[0].datetime) {
+    if(blockChart.data && blockChart.data.labels.slice(-1)[0] !== data[0].timestamp) {
       // Update Table
       blockTable.addData({
         index: data[0].index,
         generator: data[0].generator,
         size: data[0].size,
         count: data[0].count,
-        timestamp: moment(data[0].datetime).fromNow()
+        timestamp: moment(data[0].timestamp).fromNow()
       })
       
       // Update Chart
-      blockChart.data.labels.push(data[0].datetime)
+      blockChart.data.labels.push(data[0].timestamp)
       blockChart.data.datasets[0].data.push(data[0].size)
       blockChart.data.datasets[1].data.push(data[0].count)
 
       blockChart.update()
 
       document.getElementById('blockCount').innerText = data[0].index
-
     }
   })
 }
@@ -75,8 +73,6 @@ function getProducers(nodeTable, nodeChart) {
     nodeChart.data.datasets[0].data = null
     nodeChart.update()
 
-    console.log(nodeChart.data.datasets[0])
-
     // Populate Table and Chart
     data.forEach(producer => {
 
@@ -99,7 +95,6 @@ function getProducers(nodeTable, nodeChart) {
       
       var color = 'rgba(142, 68,' +  Math.round(r*s) + ',' + r.toFixed(1) + ')'
       nodeChart.data.datasets[0].backgroundColor.push(color)
-
     })
 
     // Update Chart
@@ -247,10 +242,9 @@ const blockChart = new Chart('blockChart', {
       backgroundColor: 'rgba(255,255,255,0.9)',
       mode: 'label',
       callbacks: {
-          //label: function(item, data) { 
-          //    data.labels[item.index] = data.labels[item.index]                      
-          //    return (data.labels[item.index] || 'Unknown')  + ': ' + data.datasets[0].data[item.index] + ' %'
-          //}
+          title: function(item, data) {
+            return moment(data.labels[item[0].index]).format('hh:mm:ss A')
+          }
       }
     },
     legend: {
