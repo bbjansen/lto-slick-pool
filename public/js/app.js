@@ -155,7 +155,6 @@ Promise.all([balance, leaser, blocks]).then(function(data) {
   })
   document.getElementById('totalLease').innerText = totalLease
   document.getElementById('totalBlocks').innerText = totalBlocks
-  document.getElementById('blockIndex').innerText = blockIndex
 })
 .catch(function(err) {
   console.log(err)

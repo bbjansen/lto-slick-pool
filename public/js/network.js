@@ -63,7 +63,7 @@ function getMempool(txTable) {
 // Get all producers
 function getProducers(nodeTable, nodeChart) {
 
-  fetch(cacheip + '/generator/all/day', {
+  fetch(cacheip + '/generator/all/week', {
     method: 'get'
   })
   .then((resp) => resp.json())
@@ -74,6 +74,8 @@ function getProducers(nodeTable, nodeChart) {
     nodeTable.clearData()
     nodeChart.data.datasets[0].data = null
     nodeChart.update()
+
+    console.log(nodeChart.data.datasets[0])
 
     // Populate Table and Chart
     data.forEach(producer => {
@@ -90,6 +92,13 @@ function getProducers(nodeTable, nodeChart) {
 
       nodeChart.data.labels.push(producer.label)
       nodeChart.data.datasets[0].data.push(producer.share)
+
+      //Push color
+      var r = Math.random()
+      var s = 180
+      
+      var color = 'rgba(142, 68,' +  Math.round(r*s) + ',' + r.toFixed(1) + ')'
+      nodeChart.data.datasets[0].backgroundColor.push(color)
 
     })
 
@@ -112,7 +121,7 @@ const blockTable = new Tabulator('#blockTable', {
   autoResize: true,
   resizableColumns: true,
   pagination: 'local',
-  paginationSize: 5,
+  paginationSize: 7,
   initialSort: [{ column: 'index', dir: 'desc' }],
   columns: [
     { title: 'Block', field: 'index', align: 'left', formatter: 'link', formatterParams: {
@@ -145,7 +154,7 @@ const blockChart = new Chart('blockChart', {
     {
       label: 'Tx',
       borderWidth: '2',
-      pointRadius: '1',
+      pointRadius: '3',
       color: 'rgba(40, 171, 191, 0.9)',
       backgroundColor: 'rgba(40, 171, 191, 0.6)',
       fill: false,
@@ -155,6 +164,71 @@ const blockChart = new Chart('blockChart', {
   options: {
     //maintainAspectRatio: false,
     responsive: true,
+    scales: {
+      xAxes: [{
+        id: 'x-axis',
+        type: 'time',
+        ticks: {
+          autoSkip: true,
+          maxRotation: 0
+        },
+        time: {
+          unit: 'minute'
+        },
+        callback: function (value, chart) {
+          return value
+        },
+        distribution: 'series',
+        gridLines: {
+          display: false
+        }
+      }],
+      yAxes: [{
+        id: 'y-axis-1',
+        type: 'linear',
+        position: 'right',
+        ticks: {
+          fontSize: 12,
+          fontColor: '#2f2f2f',
+          fontStyle: 'thin',
+          display: true,
+          mirror: true,
+          beginAtZero: true,
+          min: 0,
+          stepSize: 50,
+          callback: function (value, chart) {
+            return value
+          }
+        },
+        gridLines: {
+          display: true,
+          drawBorder: false
+        }
+      },
+      {
+        id: 'y-axis-2',
+        type: 'linear',
+        position: 'left',
+        ticks: {
+          fontSize: 12,
+          fontColor: '#2f2f2f',
+          fontStyle: 'thin',
+          display: true,
+          mirror: true,
+          beginAtZero: true,
+          min: 0,
+          stepSize: 1,
+          callback: function (value, chart) {
+            return value
+          }
+        },
+        gridLines: {
+          display: true,
+          drawBorder: false
+        }
+      }
+    ]
+    },
     tooltips: {
       bodyFontColor: '#1f1f1f',
       bodySpacing: 5,
@@ -251,17 +325,15 @@ const nodeTable = new Tabulator('#nodeTable', {
   ]
 })
 
-
-// Initialize Node Chart
 const nodeChart = new Chart('nodeChart', {
   type: 'pie',
   data: {
     datasets: [{
-      data: null,
-      backgroundColor: ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC'],
+      data: [],
+      backgroundColor: [],
       label: 'Nodes'
     }],
-    labels: null
+    labels: []
   },
   options: {
     //maintainAspectRatio: false,
@@ -269,7 +341,7 @@ const nodeChart = new Chart('nodeChart', {
     tooltips: {
       bodyFontColor: '#1f1f1f',
       bodySpacing: 5,
-      bodyFontSize: 13,
+      bodyFontSize: 15,
       bodyFontStyle: 'normal',
       titleFontColor: '#1f1f1f',
       titleSpacing: 5,
