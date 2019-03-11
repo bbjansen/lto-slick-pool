@@ -54,7 +54,7 @@ function getLastBlock(blockTable, blockChart) {
       blockChart.data.labels.unshift(data.blocks.timestamp)
       blockChart.data.datasets[0].data.unshift(data.blocks.size)
       blockChart.data.datasets[1].data.unshift(data.blocks.fee)
-      blockChart.data.datasets[2].data.unshift(block.consensus.target)
+      blockChart.data.datasets[2].data.unshift(data.consensus.target)
     
       // Update Count
     }
