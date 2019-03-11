@@ -38,7 +38,7 @@ app.set('view engine', 'pug')
 
 //Locales
 app.use(function (req, res, next) {
-  res.locals.cacheip = 'http://' + process.env.CACHE_IP
+  res.locals.cacheip = 'https://' + process.env.CACHE_IP
   return next()
 })
 
