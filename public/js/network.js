@@ -57,9 +57,9 @@ function getLastBlock(blockTable, blockChart) {
       blockChart.data.datasets[2].data.push(block.consensus.target)
     
       // Update Count
-      document.getElementById('blockCount').innerText = data.blocks.index
     }
-
+    
+    document.getElementById('blockCount').innerText = data.blocks.index
     blockChart.update()
 
   })
