@@ -55,11 +55,13 @@ function getLastBlock(blockTable, blockChart) {
       blockChart.data.datasets[0].data.unshift(data.blocks.size)
       blockChart.data.datasets[1].data.unshift(data.blocks.fee)
       blockChart.data.datasets[2].data.push(block.consensus.target)
-      blockChart.update()
+    
+      // Update Count
+      document.getElementById('blockCount').innerText = data.blocks.index
     }
 
+    blockChart.update()
 
-    document.getElementById('blockCount').innerText = data.blocks.index
   })
 }
 
