@@ -56,18 +56,16 @@ function getLastBlock(blockTable, blockChart) {
       blockChart.data.datasets[1].data.unshift(data.blocks.fee)
       blockChart.data.datasets[2].data.unshift(data.consensus.target)
     
-      // Update Count
     }
-
+    // Update Count
     document.getElementById('blockCount').innerText = data.blocks.index
     blockChart.update()
 
   })
 }
 
-
 // Get unconfirmed tx and insert into table
-function getMempool(txTable) {
+function getMempool(txTable, txChart) {
 
   fetch(cacheip + '/transaction/unconfirmed/', {
     method: 'get'
@@ -86,10 +84,18 @@ function getMempool(txTable) {
             fee: tx.fee,
             sender: tx.sender
           })
-        })
 
+          // Update Chart
+          txChart.data.datasets[0].data.push(tx.size)
+          txChart.data.datasets[1].data.push(tx.fee)
+          txChart.data.datasets[2].data.push(tx.type)
+        })
+        
+        txChart.update()
         document.getElementById('mempoolCount').innerText = data.length
+
       }
+
   })
 }
 
@@ -326,6 +332,108 @@ var txTable = new Tabulator('#txTable', {
   ]
 })
 
+// Initialize Mempool Chart
+
+var txChart = new Chart('txChart', {
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'Size',
+      borderWidth: '3',
+      pointRadius: '3',
+      color: 'rgba(142, 68, 173, 0.9)',
+      borderColor: 'rgba(142, 68, 173, 0.5)',
+      data: []
+    },
+    {
+      label: 'Fee',
+      borderWidth: '3',
+      pointRadius: '3',
+      color: 'rgba(40, 171, 191, 0.7)',
+      borderColor: 'rgba(40, 171, 191, 1)',
+      data: []
+    },
+    {
+      label: 'Type',
+      borderWidth: '3',
+      pointRadius: '3',
+      color: 'rgba(216, 20, 132, 0.7)',
+      borderColor: 'rgba(216, 20, 132, 1)',
+      data: []
+    }
+  ]
+  },
+  options: {
+    maintainAspectRatio: true,
+    responsive: true,
+    scales: {
+      xAxes: [{
+        id: 'x-axis',
+        callback: function (value, chart) {
+          return value
+        },
+        distribution: 'series',
+        gridLines: {
+          display: false
+        }
+      }],
+      yAxes: [{
+        id: 'y-axis-1',
+        //type: 'logarithmic',
+        position: 'right',
+        ticks: {
+          display: false,
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    ]
+    },
+    tooltips: {
+      bodyFontColor: '#1f1f1f',
+      bodySpacing: 5,
+      bodyFontSize: 13,
+      bodyFontStyle: 'normal',
+      titleFontColor: '#1f1f1f',
+      titleSpacing: 5,
+      titleFontSize: 17,
+      titleMarginBottom: 10,
+      titleFontStyle: 'bold',
+      xPadding: 15,
+      yPadding: 15,
+      intersect: false,
+      displayColors: true,
+      cornerRadius: 0,
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      mode: 'label',
+      callbacks: {
+          title: function(item, data) {
+            return moment(data.labels[item[0].index]).format('hh:mm:ss A')
+          },
+          label: function(item, data) {
+            if (item.datasetIndex === 0) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
+            } else if (item.datasetIndex === 1) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel.toFixed(2) + ' LTO'
+            } else if (item.datasetIndex === 2) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
+            }
+          }
+      }
+    },
+    legend: {
+      display: true,
+      position: 'bottom'
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeOutQuint'
+    }
+  }
+})
+
 // Intialize Node Table
 var nodeTable = new Tabulator('#nodeTable', {
   data: [],
@@ -415,7 +523,7 @@ setInterval(function() {
 }, 7000)
 
 setInterval(function() { 
-  getMempool(txTable)
+  getMempool(txTable, txChart)
 }, 5000)
 
 
@@ -425,6 +533,6 @@ setInterval(function() {
 
 
 getLastBlocks(blockTable, blockChart)
-getMempool(txTable)
+getMempool(txTable, txChart)
 getProducers(nodeTable, nodeChart)
 
