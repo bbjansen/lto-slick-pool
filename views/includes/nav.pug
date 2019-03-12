@@ -40,7 +40,7 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
                             span
                                 span.icon.has-text-primary
                                     i.icon-organization
-                                strong.is-size-6 Network Dashboard
+                                strong.is-size-6 Network Overview
                                 br
                                 | Live visual data on the LTO Network.
 
@@ -55,12 +55,12 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
 
             .navbar-end
                 .navbar-item
-                    .tag.is-medium.is-warning.tooltip.is-tooltip-bottom(data-tooltip='Total Unpaid')#totalAmountUnpaid
+                    .tag.is-medium.is-white.tooltip.is-tooltip-bottom(data-tooltip='Total Unpaid')#totalAmountUnpaid
                 .navbar-item
-                    .tag.is-medium.is-success.tooltip.is-tooltip-bottom(data-tooltip='Total Paid')#totalAmountPaid         
+                    .tag.is-medium.is-black.tooltip.is-tooltip-bottom(data-tooltip='Total Paid')#totalAmountPaid         
                 .navbar-item
-                    .tag.is-medium.is-info.tooltip.is-tooltip-bottom(data-tooltip='Total Stake')#totalAmount
+                    .tag.is-medium.is-info.tooltip.is-tooltip-bottom(data-tooltip='Pooled Amount')#totalAmount
                 .navbar-item
-                    .tag.is-medium.is-white.tooltip.is-tooltip-bottom(data-tooltip='Active Leases')#totalLease
+                    .tag.is-medium.is-light.tooltip.is-tooltip-bottom(data-tooltip='Active Leases')#totalLease
                 .navbar-item
-                    .tag.is-medium.is-dark.tooltip.is-tooltip-bottom(data-tooltip='Forged Blocks')#totalBlocks
+                    .tag.is-medium.is-dark.tooltip.is-tooltip-bottom(data-tooltip='Found Blocks')#totalBlocks
