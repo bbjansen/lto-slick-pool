@@ -15,7 +15,16 @@ html
 					.content
 						p.has-text-left Leasing is a trustless process in which the user (leaser) delegates a choosen amount of LTO towards a block producer by creating a special type of transaction on the LTO network known as a 'lease' transaction (type 8). The lease can be canceled at anytime by the leaser without the consent of the block producer, resulting in the LTO become 'unlocked' and available for instant use again.
 						p.has-text-left By leasing your LTO tokens towards a block producer like us, you essentially earn interest on it like putting monies in a bank. However, the interest that is earned involves luck and thus will vary. The larger the amount that is pooled together, the higher the odds are of winning; think of a lottery. However, it is important to understand the reward of each block that is produced can vary greatly. While some blocks may only consist of a small award, say 1.25 LTO, other blocks can consist of say 60.00 LTO! While this is a rare occasion, it should not be dismissed!
-			
+						p.has-text-left To get started,  <a href="/get-started">following our guide</a>.
+			.container(style='margin-top:60px;')
+				.content
+					h1.title.is-size-2 What address do I lease to?
+
+			section.hero.is-light(style='padding:20px;')
+				.container.is-size-4
+					.content
+						code.has-text-centered 3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU
+
 			.container(style='margin-top:60px;')
 				.content
 					h1.title.is-size-2 How are the payouts calculated?
@@ -41,10 +50,20 @@ html
 			section.hero.is-light(style='padding:20px;')
 				.container.is-size-4
 					.content
-						p.has-text-left Payouts are handled automatically by LTO Services every 24 hours and will only be executed if the sum of all unpaid block rewards is equal or greater than the set minimum <b>total</b>payout limit of #{payout} LTO. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly to your lease address. The fee for the mass transaction is currently covered by LTO Services and is calculated using the following formula:
-						code.has-text-centered massTxFee = 0.25 + (0.10 * n of transactions)
+						p.has-text-left Payouts are handled automatically by LTO Services every 24 hours and will only be executed if the sum of all unpaid block rewards is equal or greater than the set minimum <b>total</b> payout limit of #{payout} LTO. Once this limit has been reached, payouts will be broadcasted to the LTO Network in form of a mass transaction and can be expected to be received nearly instantly to your lease address. The fee for the mass transaction is currently covered by LTO Services and is calculated using the following formula:
+						code.has-text-centered massTxFee = 1.00 + (0.10 * n of transactions)
 						br
 						br
 						p.has-text-left Please note that he minimum payout limit may be altered in order to reflect the current LTO network node environment in order to achieve minimum fees on mass transactions. The current unpaid pool sum is located in the top-right corner of the website, highlighted in orange.
+
+
+
+			.container(style='margin-top:60px;')
+				.content
+					h1.title.is-size-2 How do I cancel my lease?
+			section.hero.is-light(style='padding:20px;')
+				.container.is-size-4
+					.content
+						p.has-text-left You may cancel your lease at anytime on your own terms, without prior notice. During the leasing process, the allocated amount will always remain in the official wallet and under the direct control of the leaser. To end a lease, login into the official LTO web wallet; navigate to 'Leases'; and click 'Cancel lease' on the lease you wish to cancel.
 
 		include ../includes/footer.pug
