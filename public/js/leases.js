@@ -47,7 +47,12 @@ function getLeases(address) {
               maximumFractionDigits: 2
             })
           }},
-          { title: 'Block', field: 'start', align: 'left' },
+          { title: 'Block', field: 'start', align: 'left', formatter: function(row) {
+            return row._cell.value.toLocaleString(undefined, {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            })
+          }},
           {
             title: 'Status', field: 'active', align: 'center', formatter: function (row) {
               if(row._cell.value === 1) {

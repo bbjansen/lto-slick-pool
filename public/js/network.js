@@ -134,7 +134,7 @@ function getProducers(nodeTable, nodeChart) {
         generator: producer.generator,
         label: producer.label,
         url: producer.url,
-        regular: producer.regular,
+        pool: producer.pool,
         blocks: producer.blocks,
         earnings: producer.earnings,
         share: producer.share
@@ -182,7 +182,12 @@ var blockTable = new Tabulator('#blockTable', {
       }
     },
     { title: 'Size', field: 'size', align: 'left'},
-    { title: 'Txns', field: 'count', align: 'left'},
+    { title: 'Txns', field: 'count', align: 'left', formatter: function(row) {
+      return row._cell.value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      })
+    }},
     { title: 'Timestamp', field: 'timestamp', align: 'left', formatter: function(row) {
       return moment(row._cell.value).fromNow()
     }}
@@ -333,10 +338,19 @@ var txTable = new Tabulator('#txTable', {
       }
     },
     { title: 'Block', field: 'block', align: 'left', formatter: 'link', formatterParams: {
-        url: function (row) { return 'https://explorer.lto.network/block/' + row._cell.value }
+        url: function (row) { return 'https://explorer.lto.network/block/' + row._cell.value.toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        })
+      },
       }
     },
-    { title: 'Fee', field: 'fee', align: 'left'},
+    { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {
+      return row._cell.value.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+    }},
     { title: 'Sender', field: 'sender', align: 'left', formatter: 'link', formatterParams: {
         url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
       }
@@ -366,13 +380,26 @@ var nodeTable = new Tabulator('#nodeTable', {
       return res || row.getValue()
 
     }},
-    { title: 'Regular', field: 'regular', align: 'left', formatter: function(row) {
-      return row._cell.value.toFixed(2)
+    { title: 'Pool Amount', field: 'pool', align: 'left', formatter: function(row) {
+      return row._cell.value.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
     }},
-    { title: 'Blocks', field: 'blocks', align: 'left'},
-    { title: 'Earnings', field: 'earnings', align: 'left'},
+    { title: 'Blocks', field: 'blocks', align: 'left', formatter: function(row) {
+      return row._cell.value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      })
+    }},
+    { title: 'Earnings', field: 'earnings', align: 'left', formatter: function(row) {
+      return row._cell.value.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+    }},
     { title: 'Share', field: 'share', align: 'left', formatter: function(row) {
-      return row._cell.value + ' %'
+      return row._cell.value + '%'
     }}
   ]
 })

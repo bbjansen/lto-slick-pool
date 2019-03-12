@@ -25,9 +25,12 @@ function getBlocks() {
         paginationSize: 15,
         initialSort: [{ column:'blockIndex', dir:'desc' }],
         columns: [
-          {
-            title: 'Block', field: 'blockIndex', align: 'left', formatter: 'link', formatterParams: {
-              url: function (row) { return 'https://explorer.lto.network/blocks/' + row._cell.value }
+          { title: 'Block', field: 'blockIndex', align: 'left', formatter: 'link', formatterParams: {
+              url: function (row) { return 'https://explorer.lto.network/blocks/' + row._cell.value.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                })
+              }
             }
           },
           { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {
