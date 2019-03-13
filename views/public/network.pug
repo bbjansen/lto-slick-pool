@@ -58,8 +58,21 @@ html
 						.columns
 							.column
 								#nodeTable
-							.column.is-marginless.is-paddingless(style='display: flex; align-items: center;')
-								div(style='width: 100%;height:auto;')
+							.column
+								.level(style='margin: 0 20px 0 20px;')
+									.level-left
+
+									.level-right
+										.field
+											.control
+												.select.is-dark.is-small
+													select(onchange='chartProducersFilter()')#producersChartDateFilter
+														option(value='day') Day
+														option(value='week' selected='selected') Week
+														option(value='month') Month
+														option(value='year') Year
+
+								div(style='width: 100%;height:auto;margin-top:6vh;')
 									canvas#nodeChart
 								
 						.has-text-left <i><b>Data:</b> based on live incoming data from the LTO-Chain-Cache API (LCCA) designed by LTO Services. </a>

@@ -106,7 +106,7 @@ function getMempool(txTable) {
   })
 }
 
-// Get last few blocks to populate chart and table
+// Generate tx chart
 function getTxStats(txChart, range, scale) {
 
 
@@ -166,10 +166,27 @@ function getTxStats(txChart, range, scale) {
   })
 }
 
-// Get all producers
-function getProducers(nodeTable, nodeChart) {
+// Tx Chart Filter
+function chartTxFilter() {
 
-  fetch(cacheip + '/generator/all/week', {
+  let period = document.getElementById('txChartDateFilter').value
+  let scale = document.getElementById('txChartScaleFilter').checked
+
+  if(scale === true) {
+    scale = 'logarithmic'
+    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Linear')
+  } else {
+    scale = 'linear'
+    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Log')
+  }
+
+  getTxStats(txChart, period, scale)
+}
+
+// Get all producers
+function getProducers(nodeTable, nodeChart, period) {
+
+  fetch(cacheip + '/generator/all/' + period, {
     method: 'get'
   })
   .then((resp) => resp.json())
@@ -213,7 +230,11 @@ function getProducers(nodeTable, nodeChart) {
   })
 }
 
-
+// Producers Chart Filter
+function chartProducersFilter() {
+  let period = document.getElementById('producersChartDateFilter').value
+  getProducers(nodeTable, nodeChart, period)
+}
 //Initialize Block Table
 var blockTable = new Tabulator('#blockTable', {
   data: [],
@@ -410,6 +431,7 @@ var txTable = new Tabulator('#txTable', {
   resizableColumns: true,
   pagination: 'local',
   paginationSize: 7,
+  placeholder: 'no transactions to validate',
   initialSort: [{ column: 'block', dir: 'desc' }],
   columns: [
     { title: 'ID', field: 'id', align: 'left', formatter: 'link', formatterParams: {
@@ -614,7 +636,7 @@ var nodeTable = new Tabulator('#nodeTable', {
 })
 
 var nodeChart = new Chart('nodeChart', {
-  type: 'pie',
+  type: 'doughnut',
   data: {
     datasets: [{
       data: [],
@@ -686,28 +708,11 @@ setInterval(function() {
   chartTxFilter()
 }, 60000)
 
-function chartTxFilter() {
-
-  let period = document.getElementById('txChartDateFilter').value
-  let scale = document.getElementById('txChartScaleFilter').checked
-
-  if(scale === true) {
-    scale = 'logarithmic'
-    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Linear')
-  } else {
-    scale = 'linear'
-    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Log')
-  }
-
-  getTxStats(txChart, period, scale)
-}
-
 
 // Initiate Producers
-getProducers(nodeTable, nodeChart)
+getProducers(nodeTable, nodeChart, 'week')
 
 setInterval(function() { 
-  getProducers(nodeTable, nodeChart)
+  chartProducersFilter()
 }, 60000)
-
 
