@@ -47,12 +47,11 @@ function getLeases(address) {
               maximumFractionDigits: 2
             })
           }},
-          { title: 'Block', field: 'start', align: 'left', formatter: function(row) {
-            return row._cell.value.toLocaleString(undefined, {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0
-            })
-          }},
+          {
+            title: 'Block', field: 'start', align: 'left', formatter: 'link', formatterParams: {
+              url: function (row) { return 'https://explorer.lto.network/block/' + row._cell.value }
+            }
+          },
           {
             title: 'Status', field: 'active', align: 'center', formatter: function (row) {
               if(row._cell.value === 1) {
