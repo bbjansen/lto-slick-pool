@@ -5,6 +5,7 @@
 'use strict'
 require('dotenv').config('../')
 const db = require('../utils/utils').knex
+const twitter = require('../utils/utils').twitter
 const axios = require('axios')
 const cron = require('node-cron')
 
@@ -26,37 +27,38 @@ cron.schedule('* * * * *', () => {
     const leases = await axios.get('https://' + process.env.NODE_IP + '/leasing/active/' + process.env.NODE_ADDRESS)
 
     // Loop through each detected lease
-    leases.data.forEach(lease => {
+    leases.data.map(async (lease) => {
 
       // An extra check can never hurt :)
       if(lease.recipient === process.env.NODE_ADDRESS && lease.type === 8) {
 
-        // Insert lease - Duplicate transaction ID is ignored by the DB
-        db('leases')
-        .insert({
-          tid: lease.id,
-          address: lease.sender,
-          amount: (lease.amount / process.env.ATOMIC),
-          fee: (lease.fee / process.env.ATOMIC),
-          start: lease.height,
-          timestamp: lease.timestamp
-        })
-        .then(d => {
-          //Log succes
-          console.log('[Lease] [' + lease.id + '] [' + lease.height + '] recorded.')
-        })
-        .catch(err => {
+        const checkLease = await db('leases')
+        .count('* as count')
+        .where('tid', lease.id)
 
-          //If duplicate
-          if(err.errno === 1062) {
-            //console.log('[Lease] [' + lease.id + '] [' + lease.height + '] duplicate.')
-          } else {
-            console.log('' + err)
+        if(checkLease[0].count === 0) {
+          // Insert lease - Duplicate transaction ID is ignored by the DB
+          const newLease = await db('leases')
+          .insert({
+            tid: lease.id,
+            address: lease.sender,
+            amount: (lease.amount / process.env.ATOMIC),
+            fee: (lease.fee / process.env.ATOMIC),
+            start: lease.height,
+            timestamp: lease.timestamp
+          })
+
+          // Tweet Lease
+          if(process.env.PRODUCTION === true) {
+            await twitter.post('statuses/update', { 
+              status: 'Lease #' + newLease[0] + ' signed by ' + lease.sender + ' with an amount of ' + (lease.amount / process.env.ATOMIC).toFixed(2) + ' $LTO! https://lto.services/leases'
+            })
           }
-        })
-      } else {
-        throw new Error('Conflicting node address or transaction type.')
-      }      
+
+          // Log success
+          console.log('[Lease] [' + lease.id + '] [' + lease.height + '] recorded.')
+        }
+      }
     })
   }
   catch(err) {

@@ -5,6 +5,7 @@
 'use strict'
 require('dotenv').config('../')
 const db = require('../utils/utils').knex
+const twitter = require('../utils/utils').twitter
 const moment = require('moment')
 const axios = require('axios')
 const cron = require('node-cron')
@@ -26,7 +27,7 @@ async function verifyBlocks() {
     .where('verified', false)
 
     // Loop through each block
-    blocks.forEach(block => {
+    blocks.map(async (block) => {
 
       // Calculate if 90 minutes have passed. This is the 'timeout' for a tx in
       // the LTO networks mempool so why not base it on this
@@ -34,32 +35,28 @@ async function verifyBlocks() {
       let duration = moment.duration(moment().diff(moment(block.timestamp))).asMinutes()
 
       if(duration >= 90) {
+      
+        // update block status
+        await db('blocks')
+        .update({
+          verified: true,
+        })
+        .where('blockIndex', block.blockIndex)
 
-        // To calculate the earned staking reward for the produced block you have to take
-        // 40% of the fee of the produced block and 60% of the fee of block whose reference
-        // corresponds with the signature of the produced block. Use the node API to find this
-        
-        axios.get('https://' + process.env.NODE_IP + '/blocks/at/' + (+block.blockIndex - 1))
-        .then(res => {
-          const prevBlockFee = (res.data.fee / process.env.ATOMIC)
-          const reward = (block.fee * 0.4) + (prevBlockFee * 0.6)
-          return reward
-        })
-        .then(reward => {
-          // update block status
-          return db('blocks')
-          .update({
-            verified: true,
-            reward: reward
+        const getTotalUnpaid = await db('blocks')
+        .sum('reward as sum')
+        .where('paid', false)
+
+        // Tweet Maturity
+        if(process.env.PRODUCTION === true) {
+          await twitter.post('statuses/update', { 
+            status: 'Block #' + block.blockIndex + ' has matured. Total unpaid amount is now ' + +getTotalUnpaid[0].sum.toFixed(2)  + ' $LTO. https://lto.services/blocks'
           })
-          .where('blockIndex', block.blockIndex)
-        })
-        .then(d => {
-          console.log('[Block] [' + block.blockIndex + '] verified.')
-        })
-        .catch(err => {
-          console.log('' + err)
-        })
+        }
+        
+        // Log
+        consle.log('[Block] [' + block.blockIndex + '] verified.')
+ 
       }
       else {
         console.log('[Block] [' + block.blockIndex + '] not matured.')

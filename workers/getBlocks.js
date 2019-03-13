@@ -5,6 +5,7 @@
 'use strict'
 require('dotenv').config('../')
 const db = require('../utils/utils').knex
+const twitter = require('../utils/utils').twitter
 const axios = require('axios')
 const cron = require('node-cron')
 
@@ -61,33 +62,38 @@ async function getBlocks() {
     const blocks = await axios.get('https://' + process.env.NODE_IP + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + lastIndex[0].scanIndex + '/' + newScanIndex)
 
     // Loop through each detected block
-    blocks.data.forEach(block => {
+    blocks.data.map(async (block) => {
 
       // An extra check can never hurt :)
       if(block.generator === process.env.NODE_ADDRESS) {
+        
+        // To calculate the earned staking reward for the produced block you have to take
+        // 40% of the fee of the produced block and 60% of the fee of block whose reference
+        // corresponds with the signature of the produced block. Use the node API to find this
+        
+        const reward = await axios.get('https://' + process.env.NODE_IP + '/blocks/at/' + (+block.height - 1))
+        const prevBlockFee = (reward.data.fee / process.env.ATOMIC)
+        const adjustedReward = (block.fee * 0.4) + (prevBlockFee * 0.6)
 
         // Insert block - Duplicate block are ignored by the DB
-        db('blocks')
+        await db('blocks')
         .insert({
           blockIndex: block.height,
           fee: (block.fee / process.env.ATOMIC),
+          reward: adjustedReward,
           timestamp: block.timestamp
         })
-        .then(d => {
-          console.log('[Block] [' + block.height + '] recorded.')
-        })
-        .catch(err => {
 
-          //If duplicate
-          if(err.errno === 1062) {
-            console.log('[Block] [' + block.height + '] duplicate.')
-          } else {
-            console.log('' + err)
-          }
-        })
-      } else {
-        throw new Error('Conflicting node address or transaction type.')
-      }      
+        // Tweet Maturity
+        if(process.env.PRODUCTION === true) {
+          await twitter.post('statuses/update', { 
+            status: 'Block #' + block.height + ' has been forged with a reward of ' + adjustedReward.toFixed(2)  + ' $LTO! https://lto.services/blocks'
+          })
+        }
+
+        // Log
+        console.log('[Block] [' + block.height + '] recorded.')
+      }
     })
 
     // Set new scanIndex

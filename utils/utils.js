@@ -4,3 +4,4 @@
 'use strict'
 
 module.exports.knex = require('./db/knex.js')
+module.exports.twitter = require('./twitter.js')

@@ -30,34 +30,28 @@ async function verifyLeases() {
     const blockIndex = await axios.get('https://' + process.env.NODE_IP + '/blocks/height')
 
     // Loop through each logged lease
-    leases.forEach(lease => {
+    leases.map(async (lease) => {
 
       // Check tx info from the network
-      axios.get('https://' + process.env.NODE_IP + '/transactions/info/' + lease.tid)
-      .then(tx => {
+      const tx = await axios.get('https://' + process.env.NODE_IP + '/transactions/info/' + lease.tid)
 
-        // Can't hurt to double check :)
-        if(lease.tid === tx.data.id) {
+      // Can't hurt to double check :)
+      if(lease.tid === tx.data.id) {
 
-          // Update status if the lease is not active anymore
-          if(tx.data.status !== 'active') {
+        // Update status if the lease is not active anymore
+        if(tx.data.status !== 'active') {
 
-            db('leases')
-            .update({
-              end: blockIndex.data.height,
-              active: false
-            })
-            .where('tid', lease.tid)
-            .then(d => {
-              console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] canceled.')
-            })
-          } else {
-            //console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] active.')
-          }
-        } else {
-          throw new Error('Conflicting transction ID.')
+          await db('leases')
+          .update({
+            end: blockIndex.data.height,
+            active: false
+          })
+          .where('tid', lease.tid)
+
+          // Log
+          console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] canceled.')
         }
-      })
+      }
     })
   }
   catch(err) {
