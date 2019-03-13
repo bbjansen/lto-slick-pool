@@ -33,9 +33,11 @@ function getLastBlocks(blockTable, blockChart) {
 
         // Update Chart
         blockChart.data.labels.push(block.blocks.timestamp)
-        blockChart.data.datasets[0].data.push(block.blocks.size)
-        blockChart.data.datasets[1].data.push(block.blocks.fee)
-        blockChart.data.datasets[2].data.push(block.consensus.target)
+        blockChart.data.datasets[0].data.push(block.blocks.index)
+        blockChart.data.datasets[1].data.push(block.blocks.size)
+        blockChart.data.datasets[2].data.push(block.blocks.fee)
+        blockChart.data.datasets[3].data.push(block.consensus.target)
+
       })
 
       blockChart.update()
@@ -67,9 +69,10 @@ function getLastBlock(blockTable, blockChart) {
       
       // Update Chart
       blockChart.data.labels.unshift(data.blocks.timestamp)
-      blockChart.data.datasets[0].data.unshift(data.blocks.size)
-      blockChart.data.datasets[1].data.unshift(data.blocks.fee)
-      blockChart.data.datasets[2].data.unshift(data.consensus.target)
+      blockChart.data.datasets[0].data.unshift(data.blocks.index)
+      blockChart.data.datasets[1].data.unshift(data.blocks.size)
+      blockChart.data.datasets[2].data.unshift(data.blocks.fee)
+      blockChart.data.datasets[3].data.unshift(data.consensus.target)
     
     }
     // Update Count
@@ -244,9 +247,18 @@ var blockChart = new Chart('blockChart', {
   data: {
     datasets: [{
       type: 'line',
+      label: 'Index',
+      borderWidth: '0',
+      pointRadius: '0',
+      color: 'rgba(0, 0, 0, 0)',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      data: null,
+      hidden: true
+    },{
+      type: 'line',
       label: 'Size',
-      borderWidth: '3',
-      pointRadius: '3',
+      borderWidth: '1',
+      pointRadius: '1',
       color: 'rgba(142, 68, 173, 0.9)',
       backgroundColor: 'rgba(142, 68, 173, 0.5)',
       fill: true,
@@ -254,20 +266,20 @@ var blockChart = new Chart('blockChart', {
     },
     {
       label: 'Fee',
-      borderWidth: '3',
-      pointRadius: '3',
+      borderWidth: '1',
+      pointRadius: '1',
       color: 'rgba(40, 171, 191, 0.7)',
-      backgroundColor: 'rgba(40, 171, 191, 1)',
+      backgroundColor: 'rgba(40, 171, 191, 0.8)',
       fill: false,
       stacked: true,
       data: []
     },
     {
       label: 'Target',
-      borderWidth: '3',
-      pointRadius: '3',
+      borderWidth: '1',
+      pointRadius: '1',
       color: 'rgba(216, 20, 132, 0.7)',
-      backgroundColor: 'rgba(216, 20, 132, 1)',
+      backgroundColor: 'rgba(216, 20, 132, 0.8)',
       fill: false,
       stacked: true,
       data: []
@@ -323,15 +335,21 @@ var blockChart = new Chart('blockChart', {
     ]
     },
     tooltips: {
-      bodyFontColor: '#1f1f1f',
-      bodySpacing: 5,
-      bodyFontSize: 13,
-      bodyFontStyle: 'normal',
       titleFontColor: '#1f1f1f',
       titleSpacing: 5,
       titleFontSize: 17,
       titleMarginBottom: 10,
       titleFontStyle: 'bold',
+      bodyFontColor: '#1f1f1f',
+      bodySpacing: 7,
+      bodyFontSize: 13,
+      bodyFontStyle: 'normal',
+      footerFontColor: '#1f1f1f',
+      footerSpacing: 13,
+      footerFontSize: 17,
+      footerFontStyle: 'bold',
+      footerMarginTop: 10,
+      footerMarginBottom: 5,
       xPadding: 15,
       yPadding: 15,
       intersect: false,
@@ -341,26 +359,38 @@ var blockChart = new Chart('blockChart', {
       mode: 'label',
       callbacks: {
           title: function(item, data) {
-            return moment(data.labels[item[0].index]).format('hh:mm:ss A')
+            return '     ' + data.datasets[0].data[item[0].index]
           },
           label: function(item, data) {
-            if (item.datasetIndex === 0) {
+            if (item.datasetIndex === 1) {
               return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
-            } else if (item.datasetIndex === 1) {
-              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel.toFixed(2) + ' LTO'
             } else if (item.datasetIndex === 2) {
+              return data.datasets[item.datasetIndex].label + ': ' + item.yLabel.toFixed(2) + ' LTO'
+            } else if (item.datasetIndex === 3) {
               return data.datasets[item.datasetIndex].label + ': ' + item.yLabel
             }
+          },
+          footer: function(item, data) {
+          //  return moment(data.labels[item[0].index]).format('hh:mm:ss A')
           }
       }
     },
     legend: {
       display: true,
-      position: 'bottom'
+      position: 'bottom',
+      labels: {
+        filter: function(item, chart) {
+            return !item.text.includes('Index')
+        }
+    }
     },
     animation: {
       duration: 1000,
       easing: 'easeOutQuint'
+    },
+    title: {
+      display: true,
+      text: 'LTO Network Blocks'
     }
   }
 })
@@ -420,8 +450,8 @@ var txChart = new Chart('txChart', {
       label: 'Anchor',
       borderWidth: '1',
       pointRadius: '1',
-      color: 'rgba(142, 68, 173, 0.9)',
-      backgroundColor: 'rgba(142, 68, 173, 0.7)',
+      color: 'rgba(142, 68, 173, 0.7)',
+      backgroundColor: 'rgba(142, 68, 173, 0.5)',
       fill: true,
       data: []
     },
@@ -500,7 +530,7 @@ var txChart = new Chart('txChart', {
       mode: 'label',
       callbacks: {
           title: function(item, data) {
-            return data.labels[item[0].index]
+            return '   ' + data.labels[item[0].index]
           }
       }
     },
@@ -511,6 +541,10 @@ var txChart = new Chart('txChart', {
     animation: {
       duration: 1000,
       easing: 'easeOutQuint'
+    },
+    title: {
+      display: true,
+      text: 'LTO Network Transactions'
     }
   }
 })
@@ -527,7 +561,6 @@ var nodeTable = new Tabulator('#nodeTable', {
   initialSort: [{ column: 'blocks', dir: 'desc' }],
   columns: [
     { title: 'Producer', field: 'generator', align: 'left', formatter: function(row, formatterParams) {
-
       if(row.getData().label) {
         var res = '<a href="' + row.getData().url + '">' + row.getData().label + '</a>'
       } else {
@@ -535,7 +568,6 @@ var nodeTable = new Tabulator('#nodeTable', {
       }
 
       return res || row.getValue()
-
     }},
     { title: 'Pool Amount', field: 'pool', align: 'left', formatter: function(row) {
       return row._cell.value.toLocaleString(undefined, {
@@ -621,8 +653,8 @@ setInterval(function() {
 }, 5000)
 
 setInterval(function() { 
-  getTxStats(txChart, 'week')
-}, 20000)
+  getTxStats(txChart, 'month')
+}, 60000)
 
 
 setInterval(function() { 
@@ -633,6 +665,6 @@ setInterval(function() {
 //getStats()
 getLastBlocks(blockTable, blockChart)
 getMempool(txTable)
-getTxStats(txChart, 'week')
+getTxStats(txChart, 'month')
 getProducers(nodeTable, nodeChart)
 
