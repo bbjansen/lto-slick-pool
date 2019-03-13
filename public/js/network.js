@@ -396,7 +396,7 @@ var blockChart = new Chart('blockChart', {
     },
     title: {
       display: true,
-      text: 'Last 35 LTO Network Blocks'
+      text: 'LTO Network Blocks'
     }
   }
 })
