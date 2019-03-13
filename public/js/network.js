@@ -80,7 +80,7 @@ function getLastBlock(blockTable, blockChart) {
 }
 
 // Get unconfirmed tx and insert into table
-function getMempool(txTable, txChart) {
+function getMempool(txTable) {
 
   fetch(cacheip + '/transaction/unconfirmed/', {
     method: 'get'
@@ -103,14 +103,59 @@ function getMempool(txTable, txChart) {
 
         // Update Chart
         txChart.data.datasets[0].data.push(block.blocks.size)
-
         txChart.update()
 
+        // Update Count
         document.getElementById('mempoolCount').innerText = data.length
       }
   })
 }
 
+// Get last few blocks to populate chart and table
+function getTxStats(txChart, range) {
+
+
+  fetch(cacheip + '/stats/transaction/' + range, {
+    method: 'get'
+  })
+  .then((resp) => resp.json())
+  .then(function(d) {
+
+    // Clear Chart
+    txChart.data.datasets[0].data = null
+    txChart.data.datasets[1].data = null
+    txChart.data.datasets[2].data = null
+    txChart.data.datasets[3].data = null
+    txChart.data.labels = []
+  
+    txChart.update()
+
+    // Populate chart
+    d.data.forEach(t => {
+      console.log(t)
+      
+      Object.entries(t.types).forEach(tx => {
+        if(+tx[0] === 4) {
+          txChart.data.datasets[0].data.push(tx[1])
+        }
+        else if(+tx[0] === 15) {
+          txChart.data.datasets[1].data.push(tx[1])
+        }
+        else if(+tx[0] === 8) {
+          txChart.data.datasets[2].data.push(tx[1])
+        }
+        else if(+tx[0] === 9) {
+          txChart.data.datasets[3].data.push(tx[1])
+        }
+      })
+      txChart.data.labels.push(t.period)
+      txChart.update()
+
+    })
+   
+    
+  })
+}
 
 // Get all producers
 function getProducers(nodeTable, nodeChart) {
@@ -122,7 +167,6 @@ function getProducers(nodeTable, nodeChart) {
   .then(function(data) {
 
     // Clear Table and Chart
-
     nodeTable.clearData()
     nodeChart.data.datasets[0].data = null
     nodeChart.update()
@@ -321,7 +365,6 @@ var blockChart = new Chart('blockChart', {
   }
 })
 
-
 //Initialize Mempool Table
 var txTable = new Tabulator('#txTable', {
   data: [],
@@ -330,7 +373,7 @@ var txTable = new Tabulator('#txTable', {
   autoResize: true,
   resizableColumns: true,
   pagination: 'local',
-  paginationSize: 10,
+  paginationSize: 7,
   initialSort: [{ column: 'block', dir: 'desc' }],
   columns: [
     { title: 'ID', field: 'id', align: 'left', formatter: 'link', formatterParams: {
@@ -356,6 +399,120 @@ var txTable = new Tabulator('#txTable', {
       }
     }
   ]
+})
+
+// Initialize Tx Chart
+var txChart = new Chart('txChart', {
+  type: 'line',
+  data: {
+    datasets: [{
+      type: 'line',
+      label: 'Tx',
+      borderWidth: '1',
+      pointRadius: '1',
+      color: 'rgba(40, 171, 191, 0.7)',
+      backgroundColor: 'rgba(40, 171, 191, 0.5)',
+
+      fill: true,
+      data: []
+    },
+    {
+      label: 'Anchor',
+      borderWidth: '1',
+      pointRadius: '1',
+      color: 'rgba(142, 68, 173, 0.9)',
+      backgroundColor: 'rgba(142, 68, 173, 0.7)',
+      fill: true,
+      data: []
+    },
+    {
+      label: 'Start Lease',
+      borderWidth: '1',
+      pointRadius: '1',
+      color: 'rgba(116, 20, 12, 0.7)',
+      backgroundColor: 'rgba(116, 20, 12, 0.5)',
+      fill: true,
+      data: []
+    },
+    {
+      label: 'Cancel Lease',
+      borderWidth: '1',
+      pointRadius: '1',
+      color: 'rgba(216, 20, 132, 0.7)',
+      backgroundColor: 'rgba(216, 20, 132, 0.5)',
+      fill: true,
+      data: []
+    },
+  ]
+  },
+  options: {
+    maintainAspectRatio: true,
+    responsive: true,
+    scales: {
+      xAxes: [{
+        id: 'x-axis',
+        type: 'time',
+        ticks: {
+          autoSkip: true,
+          maxRotation: 0
+        },
+        time: {
+          unit: 'day'
+        },
+        callback: function (value, chart) {
+          return value
+        },
+        distribution: 'series',
+        gridLines: {
+          display: false
+        }
+      }],
+      yAxes: [{
+        id: 'y-axis-1',
+        type: 'logarithmic',
+        position: 'right',
+        ticks: {
+          display: false,
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false
+        }
+      }
+    ]
+    },
+    tooltips: {
+      bodyFontColor: '#1f1f1f',
+      bodySpacing: 5,
+      bodyFontSize: 13,
+      bodyFontStyle: 'normal',
+      titleFontColor: '#1f1f1f',
+      titleSpacing: 5,
+      titleFontSize: 17,
+      titleMarginBottom: 10,
+      titleFontStyle: 'bold',
+      xPadding: 15,
+      yPadding: 15,
+      intersect: false,
+      displayColors: true,
+      cornerRadius: 0,
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      mode: 'label',
+      callbacks: {
+          title: function(item, data) {
+            return data.labels[item[0].index]
+          }
+      }
+    },
+    legend: {
+      display: true,
+      position: 'bottom'
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeOutQuint'
+    }
+  }
 })
 
 // Intialize Node Table
@@ -463,6 +620,10 @@ setInterval(function() {
   getMempool(txTable)
 }, 5000)
 
+setInterval(function() { 
+  getTxStats(txChart, 'week')
+}, 20000)
+
 
 setInterval(function() { 
   getProducers(nodeTable, nodeChart)
@@ -472,5 +633,6 @@ setInterval(function() {
 //getStats()
 getLastBlocks(blockTable, blockChart)
 getMempool(txTable)
+getTxStats(txChart, 'week')
 getProducers(nodeTable, nodeChart)
 
