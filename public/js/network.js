@@ -1,6 +1,6 @@
 // Get last few blocks to populate chart and table
 function getLastBlocks(blockTable, blockChart) {
-  fetch(cacheip + '/block/last/10', {
+  fetch(cacheip + '/block/last/50', {
     method: 'get'
   })
   .then((resp) => resp.json())
@@ -52,7 +52,14 @@ function getLastBlock(blockTable, blockChart) {
         timestamp: data.blocks.timestamp
       })
       
-      // Update Chart
+      // Remove one data point
+      blockChart.data.labels.pop()
+      blockChart.data.datasets[0].data.pop()
+      blockChart.data.datasets[1].data.pop()
+      blockChart.data.datasets[2].data.pop()
+      blockChart.data.datasets[3].data.pop()
+
+      // Add new data point
       blockChart.data.labels.unshift(data.blocks.timestamp)
       blockChart.data.datasets[0].data.unshift(data.blocks.index)
       blockChart.data.datasets[1].data.unshift(data.blocks.size)
@@ -293,6 +300,7 @@ var blockChart = new Chart('blockChart', {
         type: 'time',
         ticks: {
           autoSkip: true,
+          display: false,
           maxRotation: 0
         },
         time: {
@@ -388,7 +396,7 @@ var blockChart = new Chart('blockChart', {
     },
     title: {
       display: true,
-      text: 'LTO Network Blocks'
+      text: 'Last 35 LTO Network Blocks'
     }
   }
 })
