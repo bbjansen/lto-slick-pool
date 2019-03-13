@@ -1,18 +1,3 @@
-// Get stats
-
-// Get unconfirmed tx and insert into table
-function getStats() {
-
-  fetch(cacheip + '/stats/', {
-    method: 'get'
-  })
-  .then((resp) => resp.json())
-    .then(function(data) {
-      console.log(data)
-  })
-}
-
-
 // Get last few blocks to populate chart and table
 function getLastBlocks(blockTable, blockChart) {
   fetch(cacheip + '/block/last/10', {
@@ -134,9 +119,7 @@ function getTxStats(txChart, range) {
     txChart.update()
 
     // Populate chart
-    d.data.forEach(t => {
-      console.log(t)
-      
+    d.data.forEach(t => {      
       Object.entries(t.types).forEach(tx => {
         if(+tx[0] === 4) {
           txChart.data.datasets[0].data.push(tx[1])
@@ -204,7 +187,6 @@ function getProducers(nodeTable, nodeChart) {
     //Set Total Count
     document.getElementById('nodeCount').innerText = data.length || 0
   }).catch(function(err) {
-    console.log(err)
   })
 }
 
@@ -498,7 +480,7 @@ var txChart = new Chart('txChart', {
         }
       }],
       yAxes: [{
-        id: 'y-axis-1',
+        id: 'y-axis',
         type: 'logarithmic',
         position: 'right',
         ticks: {
