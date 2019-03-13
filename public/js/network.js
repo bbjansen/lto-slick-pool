@@ -582,7 +582,7 @@ var nodeTable = new Tabulator('#nodeTable', {
   columns: [
     { title: 'Producer', field: 'generator', align: 'left', formatter: function(row, formatterParams) {
       if(row.getData().label) {
-        var res = '<a href="' + row.getData().url + '">' + row.getData().label + '</a>'
+        var res = '<a href="https://explorer.lto.network/address/' + row.getValue() + '">' + row.getData().label + '</a>'
       } else {
         var res = '<a href="https://explorer.lto.network/address/' + row.getValue() + '">' + row.getValue() + '</a>'
       }
