@@ -1,5 +1,4 @@
 // Initialize Data
-
 getLeases()
 
 // Get all leasers
