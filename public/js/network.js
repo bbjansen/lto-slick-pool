@@ -109,7 +109,6 @@ function getTxStats(txChart, range, scale) {
   .then((resp) => resp.json())
   .then(function(d) {
 
-    console.log(d.stats)
     // Populate Stats
     document.getElementById('txStat').innerText = d.stats.standard
     document.getElementById('massStat').innerText = d.stats.massTransactions
