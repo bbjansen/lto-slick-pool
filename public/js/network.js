@@ -100,7 +100,7 @@ function getMempool(txTable) {
 }
 
 // Get last few blocks to populate chart and table
-function getTxStats(txChart, range) {
+function getTxStats(txChart, range, scale) {
 
 
   fetch(cacheip + '/stats/transaction/' + range, {
@@ -109,37 +109,54 @@ function getTxStats(txChart, range) {
   .then((resp) => resp.json())
   .then(function(d) {
 
+    console.log(d.stats)
+    // Populate Stats
+    document.getElementById('txStat').innerText = d.stats.standard
+    document.getElementById('massStat').innerText = d.stats.massTransactions
+    document.getElementById('anchorStat').innerText = d.stats.anchor
+    document.getElementById('startLeaseStat').innerText = d.stats.startLease
+    document.getElementById('cancelLeaseStat').innerText = d.stats.cancelLease
+
     // Clear Chart
     txChart.data.datasets[0].data = null
     txChart.data.datasets[1].data = null
     txChart.data.datasets[2].data = null
     txChart.data.datasets[3].data = null
+    txChart.data.datasets[4].data = null
+
     txChart.data.labels = []
   
     txChart.update()
 
     // Populate chart
-    d.data.forEach(t => {      
+    d.data.forEach(t => {
       Object.entries(t.types).forEach(tx => {
         if(+tx[0] === 4) {
           txChart.data.datasets[0].data.push(tx[1])
         }
-        else if(+tx[0] === 15) {
+        if(+tx[0] === 11) {
           txChart.data.datasets[1].data.push(tx[1])
         }
-        else if(+tx[0] === 8) {
+        else if(+tx[0] === 15) {
           txChart.data.datasets[2].data.push(tx[1])
         }
-        else if(+tx[0] === 9) {
+        else if(+tx[0] === 8) {
           txChart.data.datasets[3].data.push(tx[1])
         }
+        else if(+tx[0] === 9) {
+          txChart.data.datasets[4].data.push(tx[1])
+        }
       })
-      txChart.data.labels.push(t.period)
-      txChart.update()
 
+      // Update Label
+      txChart.data.labels.push(moment(t.period).format('YYYY-MM-DD'))
+      txChart.update()
     })
-   
-    
+
+    // Update Scale
+    txChart.options.scales.yAxes[0].type = scale
+    txChart.update()
+
   })
 }
 
@@ -419,12 +436,22 @@ var txChart = new Chart('txChart', {
   data: {
     datasets: [{
       type: 'line',
-      label: 'Tx',
+      label: 'Standard',
       borderWidth: '1',
       pointRadius: '1',
       color: 'rgba(40, 171, 191, 0.7)',
       backgroundColor: 'rgba(40, 171, 191, 0.5)',
-
+      spanGaps: true,
+      fill: true,
+      data: []
+    },
+    {
+      label: 'Mass',
+      borderWidth: '1',
+      pointRadius: '1',
+      color: 'rgba(1, 20, 132, 0.7)',
+      backgroundColor: 'rgba(1, 20, 132, 0.5)',
+      spanGaps: true,
       fill: true,
       data: []
     },
@@ -434,6 +461,7 @@ var txChart = new Chart('txChart', {
       pointRadius: '1',
       color: 'rgba(142, 68, 173, 0.7)',
       backgroundColor: 'rgba(142, 68, 173, 0.5)',
+      spanGaps: true,
       fill: true,
       data: []
     },
@@ -443,6 +471,7 @@ var txChart = new Chart('txChart', {
       pointRadius: '1',
       color: 'rgba(116, 20, 12, 0.7)',
       backgroundColor: 'rgba(116, 20, 12, 0.5)',
+      spanGaps: true,
       fill: true,
       data: []
     },
@@ -452,12 +481,14 @@ var txChart = new Chart('txChart', {
       pointRadius: '1',
       color: 'rgba(216, 20, 132, 0.7)',
       backgroundColor: 'rgba(216, 20, 132, 0.5)',
+      spanGaps: true,
       fill: true,
       data: []
-    },
+    } 
   ]
   },
   options: {
+    spanGaps: true,
     maintainAspectRatio: true,
     responsive: true,
     scales: {
@@ -625,28 +656,51 @@ var nodeChart = new Chart('nodeChart', {
 
 
 
-// Initialize Data
+// Initiate Blocks
+getLastBlocks(blockTable, blockChart)
+
 setInterval(function() { 
   getLastBlock(blockTable, blockChart)
 }, 7000)
+
+
+// Initiate Mempool
+getMempool(txTable)
 
 setInterval(function() { 
   getMempool(txTable)
 }, 5000)
 
+
+// Initiate TX Chart
+getTxStats(txChart, 'week', 'logarithmic')
+
 setInterval(function() { 
-  getTxStats(txChart, 'month')
+  chartTxFilter()
 }, 60000)
 
+function chartTxFilter() {
+
+  let period = document.getElementById('txChartDateFilter').value
+  let scale = document.getElementById('txChartScaleFilter').checked
+
+  if(scale === true) {
+    scale = 'logarithmic'
+    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Linear')
+  } else {
+    scale = 'linear'
+    document.getElementById('txChartScaleTooltip').setAttribute('data-tooltip', 'Log')
+  }
+
+  getTxStats(txChart, period, scale)
+}
+
+
+// Initiate Producers
+getProducers(nodeTable, nodeChart)
 
 setInterval(function() { 
   getProducers(nodeTable, nodeChart)
 }, 60000)
 
-
-//getStats()
-getLastBlocks(blockTable, blockChart)
-getMempool(txTable)
-getTxStats(txChart, 'month')
-getProducers(nodeTable, nodeChart)
 

@@ -25,6 +25,31 @@ html
 								#txTable
 
 							.column
+								.level(style='margin: 0 20px 0 20px;')
+									.level-left
+										.tags
+											#txStat.tag.is-primary.is-medium.tooltip.is-tooltip-bottom(data-tooltip='Standard' style='background: rgba(40, 171, 191, 0.5);')
+											#massStat.tag.is-primary.is-medium.tooltip.is-tooltip-bottom(data-tooltip='Mass' style='background: rgba(1, 20, 132, 0.5);')
+											#anchorStat.tag.is-primary.is-medium.tooltip.is-tooltip-bottom(data-tooltip='Anchor' style='background: rgba(142, 68, 173, 0.5);')
+											#startLeaseStat.tag.is-primary.is-medium.tooltip.is-tooltip-bottom(data-tooltip='Active Leases' style='background: rgba(116, 20, 12, 0.5);')
+											#cancelLeaseStat.tag.is-primary.is-medium.tooltip.is-tooltip-bottom(data-tooltip='Cancel Leases' style='background: rgba(216, 20, 132, 0.5);')
+			
+									.level-right
+										.field.tooltip.is-tooltip-bottom(data-tooltip='Linear' style='margin: 5px 0 0 0;')#txChartScaleTooltip
+											.control
+												input#txChartScaleFilter.switch.is-outlined.is-dark.is-medium(onchange='chartTxFilter()' type='checkbox', name='txChartScaleFilter', checked='checked')
+												label(for='txChartScaleFilter')
+
+										.field
+											.control
+												.select.is-dark.is-small
+													select(onchange='chartTxFilter()')#txChartDateFilter
+														option(value='day') Day
+														option(value='week' selected='selected') Week
+														option(value='month') Month
+														option(value='year') Year
+												
+
 								div(style='width: 100%;height:auto;')
 									canvas#txChart
 
