@@ -51,7 +51,7 @@ cron.schedule('* * * * *', () => {
           // Tweet Lease
           if(+process.env.PRODUCTION === 1) {
             await twitter.post('statuses/update', { 
-              status: 'Lease #' + lease.id + ' signed by ' + lease.sender + ' with an amount of ' + (lease.amount / process.env.ATOMIC).toFixed(2) + ' $LTO! https://lto.services/leases'
+              status: 'Lease ' + lease.id + ' signed by ' + lease.sender + ' with an amount of ' + (lease.amount / process.env.ATOMIC).toFixed(2) + ' $LTO! https://lto.services/leases'
             })
           }
 

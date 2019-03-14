@@ -50,7 +50,7 @@ async function verifyBlocks() {
         // Tweet Maturity
         if(+process.env.PRODUCTION === 1) {
           await twitter.post('statuses/update', { 
-            status: 'Block #' + block.blockIndex + ' has matured. Total unpaid amount is now ' + +getTotalUnpaid[0].sum.toFixed(2)  + ' $LTO. https://lto.services/blocks'
+            status: 'Block ' + block.blockIndex + ' has matured. Total unpaid amount is now ' + +getTotalUnpaid[0].sum.toFixed(2)  + ' $LTO. https://lto.services/blocks'
           })
         }
         
