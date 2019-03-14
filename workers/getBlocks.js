@@ -85,7 +85,7 @@ async function getBlocks() {
         })
 
         // Tweet Maturity
-        if(process.env.PRODUCTION === 1) {
+        if(+process.env.PRODUCTION === 1) {
           await twitter.post('statuses/update', { 
             status: 'Block #' + block.height + ' has been forged with a reward of ' + adjustedReward.toFixed(2)  + ' $LTO! https://lto.services/blocks'
           })
