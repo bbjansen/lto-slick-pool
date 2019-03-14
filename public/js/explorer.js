@@ -325,7 +325,7 @@ const blockTxTable = new Tabulator('#blockTxTable', {
         url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
       }
     },
-    { title: 'Sender', field: 'sender', align: 'left', formatter: 'link', formatterParams: {
+    { title: 'Recipient', field: 'recipient', align: 'left', formatter: 'link', formatterParams: {
         url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
       }
     },
@@ -477,7 +477,7 @@ const addressTxTable = new Tabulator('#addressTxTable', {
         url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
       }
     },
-    { title: 'Sender', field: 'sender', align: 'left', formatter: 'link', formatterParams: {
+    { title: 'Recipient', field: 'recipient', align: 'left', formatter: 'link', formatterParams: {
         url: function (row) { return 'https://explorer.lto.network/address/' + row._cell.value }
       }
     },
