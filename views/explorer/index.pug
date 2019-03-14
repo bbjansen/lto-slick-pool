@@ -1,0 +1,156 @@
+
+html
+	include ../includes/header.pug
+
+	body
+		include ../includes/nav.pug
+
+		section
+			.container.has-background-light(style='padding:40px;')
+				.content
+					input.input.is-large.is-fullwidth.has-text-centered(onchange='queryChain(this)' placeholder='Enter transaction id, address, or block index' style='min-width:480px;')
+
+					hr
+
+					#blockResult.is-hidden
+						.levels(style='margin: 0 0 20px 0;')
+							.level-left
+								.title.is-size-2#blockIndex
+							.level-right
+								.title.is-size-4(style='margin: -30px 0 0 0;')#blockTimestamp
+
+						.columns
+							.column
+								table.table.is-fullwidth.is-striped.is-responsive.is-size-6
+									tbody
+										tr
+											td.has-text-weight-bold Transactions
+											td.has-text-right#blockTxCount
+										tr
+											td.has-text-weight-bold Fee
+											td.has-text-right#blockFee
+										tr
+											td.has-text-weight-bold Size
+											td.has-text-right#blockSize
+							.column
+								table.table.is-fullwidth.is-striped.is-responsive.is-size-6
+									tbody
+										tr
+											td.has-text-weight-bold Generator
+											td.has-text-right#blockGenerator
+										tr
+											td.has-text-weight-bold Reference
+											td.has-text-right#blockReference
+										tr
+											td.has-text-weight-bold Signature
+											td.has-text-right#blockSignature
+
+						h1.title.is-size-2 Transactions <span class='tag is-dark is-large' id='blockTxCount'>0</span>
+						.columns
+							.column
+								#blockTxTable
+
+						h1.title.is-size-2 Mass Transfers <span class='tag is-dark is-large' id='blockMassCount'>0</span>
+						.columns
+							.column
+								#blockMassTable
+
+			
+						h1.title.is-size-2 Lease <span class='tag is-success is-large' id='blockStartLeaseCount'>0</span> <span class='tag is-danger is-large' id='blockCancelLeaseCount'>0</span>
+
+						.columns
+							.column
+								#blockLeasesTable
+
+						h1.title.is-size-2 Anchor <span class='tag is-dark is-large' id='blockAnchorCount'>0</a>
+						.columns
+							.column
+								#blockAnchorTable
+
+
+					#txResult.is-hidden
+						.levels(style='margin: 0 0 20px 0;')
+							.level-left
+								.title.is-size-4#txId
+							.level-right
+								.title.is-size-4(style='margin: -30px 0 0 0;')#txTimestamp
+
+						.columns
+							.column
+								table.table.is-fullwidth.is-striped.is-responsive.is-size-6
+									tbody
+										tr
+											td.has-text-weight-bold Block
+											td.has-text-right#txBlock
+										tr
+											td.has-text-weight-bold Amount
+											td.has-text-right#txAmount
+										tr
+											td.has-text-weight-bold Fee
+											td.has-text-right#txFee
+										tr
+											td.has-text-weight-bold Type
+											td.has-text-right#txType
+																			
+							.column
+								table.table.is-fullwidth.is-striped.is-responsive.is-size-6
+									tbody
+										tr
+											td.has-text-weight-bold Recipient
+											td.has-text-right#txRecipient
+										tr
+											td.has-text-weight-bold Sender
+											td.has-text-right#txSender
+										tr
+											td.has-text-weight-bold Key
+											td.has-text-right#txSenderPublicKey
+										tr
+											td.has-text-weight-bold Signature
+											td.has-text-right#txSignature
+																			
+
+					#addressResult.is-hidden
+		
+						.columns
+							.column
+								h1.is-title-is-size-2#addressRegular
+								h1.is-subtitle.is-size-5 Regular
+							.column
+								h1.is-title-is-size-2#addressGenerating
+								h1.is-subtitle.is-size-5 Generating
+							.column
+								h1.is-title-is-size-2#addressAvailable
+								h1.is-subtitle.is-size-5 Available
+							.column
+								h1.is-title-is-size-2#addressEffective
+								h1.is-subtitle.is-size-5 Effective
+
+					
+						h1.title.is-size-2 Transactions <span class='tag is-dark is-large' id='addressTxCount'>0</span>
+						.columns
+							.column
+								#addressTxTable
+
+						h1.title.is-size-2 Mass Transfers <span class='tag is-dark is-large' id='addressMassCount'>0</span>
+						.columns
+							.column
+								#addressMassTable
+
+			
+						h1.title.is-size-2 Lease <span class='tag is-success is-large' id='addressStartLeaseCount'>0</span> <span class='tag is-danger is-large' id='addressCancelLeaseCount'>0</span>
+
+						.columns
+							.column
+								#addressLeasesTable
+
+						h1.title.is-size-2 Anchor <span class='tag is-dark is-large' id='addressAnchorCount'>0</a>
+						.columns
+							.column
+								#addressAnchorTable
+
+
+
+		include ../includes/footer.pug
+		script.
+			var cacheip = '#{cacheip}'
+		script(src='/js/explorer.js')

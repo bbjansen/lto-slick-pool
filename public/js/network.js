@@ -439,11 +439,7 @@ var txTable = new Tabulator('#txTable', {
       }
     },
     { title: 'Block', field: 'block', align: 'left', formatter: 'link', formatterParams: {
-        url: function (row) { return 'https://explorer.lto.network/block/' + row._cell.value.toLocaleString(undefined, {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0
-        })
-      },
+        url: function (row) { return 'https://explorer.lto.network/block/' + row._cell.value },
       }
     },
     { title: 'Fee', field: 'fee', align: 'left', formatter: function(row) {

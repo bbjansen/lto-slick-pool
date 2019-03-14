@@ -52,6 +52,7 @@ app.use(logger('dev'))
 // Routes
 app.use('/', require('./routes/index'))
 app.use('/api/', require('./routes/api'))
+app.use('/explorer/', require('./routes/explorer'))
 
 // Workers
 require('./workers/getBlocks')

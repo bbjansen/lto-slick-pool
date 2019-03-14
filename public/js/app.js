@@ -123,7 +123,6 @@ const blocks = fetch('/api/blocks').then(function(resp) {
   return resp.json()
 })
 
-
 Promise.all([balance, leaser, blocks]).then(function(data) {
 
   var totalUnpaid = data[0].totalUnpaid
