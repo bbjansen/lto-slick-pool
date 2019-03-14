@@ -337,7 +337,7 @@ const blockTxTable = new Tabulator('#blockTxTable', {
 })
 
 
-const blockMassTable = new Tabulator('#addressMassTable', {
+const blockMassTable = new Tabulator('#blockMassTable', {
   data: [],
   layout: 'fitColumns',
   autoResize: true,
