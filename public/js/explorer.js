@@ -133,7 +133,7 @@ async function queryChain(q) {
             timestamp: tx.timestamp
           })
 
-          sumEndLease += 1
+          sumAnchor += 1
         } 
       })
 
@@ -269,7 +269,7 @@ async function queryChain(q) {
             timestamp: tx.timestamp
           })
 
-          sumEndLease += 1
+          sumAnchor += 1
         } 
       })
 
