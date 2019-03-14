@@ -575,7 +575,7 @@ const addressAnchorTable = new Tabulator('#addressAnchorTable', {
   resizableColumns: true,
   pagination: 'local',
   paginationSize: 7,
-  placeholder: 'no leases',
+  placeholder: 'no anchors',
   initialSort: [{ column: 'timestamp', dir: 'desc' }],
   columns: [
     { title: 'ID', field: 'id', align: 'left', formatter: 'link', formatterParams: {
