@@ -101,9 +101,14 @@ var nodesTable = new Tabulator('#nodesTable', {
     },
     { title: 'Country', field: 'country', align: 'left' },
     { title: 'Version', field: 'version', align: 'left' },
-    { title: 'Public', field: 'public', align: 'left' },
+    { title: 'Public', field: 'public', align: 'left', formatter: function(row) {
+      if(row._cell.value === 1) {
+        return 'Open'
+      } else {
+        return 'Closed'
+      }
+    }},
     { title: 'Uptime', field: 'uptime', align: 'left', formatter: function(row) {
-
       let res
       for (var i = 0; i < row._cell.value.length; i++) {
         if(row._cell.value[i] === '|') {
@@ -112,10 +117,7 @@ var nodesTable = new Tabulator('#nodesTable', {
           res += '<span class="has-text-danger">|</span>'
         }
       }
-    console.log(res)
       return res.substring(9)
-
-
     }},
     { title: 'Updated', field: 'updated', align: 'left', formatter: function(row) {
       return moment(row._cell.value).fromNow()
