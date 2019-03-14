@@ -85,7 +85,7 @@ var nodesTable = new Tabulator('#nodesTable', {
   autoResize: true,
   resizableColumns: true,
   pagination: 'local',
-  paginationSize: 50,
+  paginationSize: 100,
   placeholder: 'no peers available',
   initialSort: [{ column: 'uptime', dir: 'desc' }],
   columns: [
