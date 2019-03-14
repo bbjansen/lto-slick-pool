@@ -451,7 +451,8 @@ const blockAnchorTable = new Tabulator('#blockAnchorTable', {
 const addressTxTable = new Tabulator('#addressTxTable', {
   data: [],
   layout: 'fitColumns',
-
+  autoResize: true,
+  resizableColumns: true,
   pagination: 'local',
   paginationSize: 7,
   placeholder: 'no transactions',
