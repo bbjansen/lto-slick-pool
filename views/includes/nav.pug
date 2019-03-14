@@ -36,6 +36,14 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
                             i.icon-wrench.is-size-5
                         span.is-size-5 Tools
                     #moreDropdown.navbar-dropdown
+                        a.navbar-item(href='/get-started')
+                            span
+                                span.icon.has-text-primary
+                                    i.icon-book-open
+                                strong.is-size-6 Getting Started <span class='tag is-info is-small'>easy</span>
+                                br
+                                | A simple guide to help you setup your lease.
+                         hr.navbar-divider
                         a.navbar-item(href='/network')
                             span
                                 span.icon.has-text-primary
@@ -53,14 +61,6 @@ nav.navbar.is-primary.is-fixed-top.is-boxed(role='navigation', aria-label='navig
                                 br
                                 | Look up data on the LTO Network by transaction ID, address or block index.
 
-                        hr.navbar-divider
-                        a.navbar-item(href='/get-started')
-                            span
-                                span.icon.has-text-primary
-                                    i.icon-book-open
-                                strong.is-size-6 Getting Started
-                                br
-                                | A simple guide to help you setup your lease.
 
             .navbar-end
                 .navbar-item
