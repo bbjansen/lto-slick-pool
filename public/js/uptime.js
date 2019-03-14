@@ -101,7 +101,7 @@ var nodesTable = new Tabulator('#nodesTable', {
     },
     { title: 'Country', field: 'country', align: 'left' },
     { title: 'Version', field: 'version', align: 'left' },
-    { title: 'Public', field: 'public', align: 'left', formatter: function(row) {
+    { title: 'API Access', field: 'public', align: 'left', formatter: function(row) {
       if(row._cell.value === 1) {
         return 'Open'
       } else {
