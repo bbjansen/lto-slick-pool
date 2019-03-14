@@ -1,0 +1,30 @@
+
+html
+	include ../includes/header.pug
+
+	body
+	
+		include ../includes/nav.pug
+
+		.hero-body
+			section.notification.is-light(style='padding: 40px;')
+				.container
+					.content
+						h1.title.is-size-2 Nodes <span class='tag is-dark is-large' id='nodesCount'>0</span>
+						.columns
+							.column
+								#nodesTable
+						h1.title.is-size-2 Geographical Visualization 
+						.columns
+							.column
+								#nodesChart
+												
+
+						.has-text-left <i><b>Data:</b> based on live incoming data from the LTO-Chain-Cache API (LCCA) designed by LTO Services.</i>
+
+		include ../includes/footer.pug
+		script.
+			var cacheip = '#{cacheip}'
+			var gMapsAPI = '#{google}'
+		script(src='https://www.gstatic.com/charts/loader.js')
+		script(src='/js/uptime.js')

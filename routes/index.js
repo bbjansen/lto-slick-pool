@@ -88,6 +88,20 @@ router.get('/network', async function(req, res, next) {
   }
 })
 
+
+// Uptime
+router.get('/uptime', async function(req, res, next) {
+  try {
+    res.render('public/uptime', {
+      title: 'Nodes Uptime',
+      google: process.env.GOOGLE_MAPS_API_KEY
+    })
+  } catch (err) {
+    next(err)
+  }
+})
+
+
 // Get Started
 router.get('/status', async function(req, res, next) {
   try {
