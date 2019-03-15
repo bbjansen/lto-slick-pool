@@ -2,7 +2,6 @@
 // Generate tx chart
 function getNodes(nodesTable) {
 
-
   fetch(cacheip + '/peer/all', {
     method: 'get'
   })
