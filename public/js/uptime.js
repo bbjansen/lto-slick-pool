@@ -20,22 +20,16 @@ function getNodes(nodesTable) {
       
       let count = 0
 
-      console.log(count)
-
       peers.forEach(pp => {
         if(p.country === pp.country) {
           count += 1
         }
       })
-
-  
       mapArray.push([p.country, count])
 
     })
   
-
     mapArray.unshift(['Country', 'Nodes'])
-    console.log(mapArray)
 
     google.charts.load('current', {
       'packages':['geochart'],
@@ -66,7 +60,8 @@ function getNodes(nodesTable) {
         generator: p.generator,
         country: p.country,
         version: p.version,
-        public: p.public,
+        port: p.port,
+        api: p.api,
         uptime: p.uptime,
         updated: p.updated
       })
@@ -101,8 +96,15 @@ var nodesTable = new Tabulator('#nodesTable', {
     },
     { title: 'Country', field: 'country', align: 'left' },
     { title: 'Version', field: 'version', align: 'left' },
-    { title: 'API Access', field: 'public', align: 'left', formatter: function(row) {
-      if(row._cell.value === 1) {
+    { title: 'P2P Port', field: 'port', align: 'left', formatter: function(row) {
+      if(row._cell.value == 1) {
+        return 'Open'
+      } else {
+        return 'Closed'
+      }
+    }},
+    { title: 'API Access', field: 'api', align: 'left', formatter: function(row) {
+      if(+row._cell.value == 1) {
         return 'Open'
       } else {
         return 'Closed'
@@ -122,11 +124,8 @@ var nodesTable = new Tabulator('#nodesTable', {
     { title: 'Updated', field: 'updated', align: 'left', formatter: function(row) {
       return moment(row._cell.value).fromNow()
     }}
-
   ]
 })
-
-
 
 
 // Initiate Node Chart
