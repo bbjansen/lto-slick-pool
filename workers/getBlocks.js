@@ -8,7 +8,7 @@ const db = require('../utils/utils').knex
 const twitter = require('../utils/utils').twitter
 const axios = require('axios')
 const cron = require('node-cron')
-
+getBlocks()
 // Run every minute
 cron.schedule('* * * * *', () => {
   getBlocks()
@@ -61,6 +61,7 @@ async function getBlocks() {
     // Scan for new blocks starting at the last recorded block index (scanIndex)
     const blocks = await axios.get('https://' + process.env.NODE_IP + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + lastIndex[0].scanIndex + '/' + newScanIndex)
 
+    console.log(blocks.data)
     // Loop through each detected block
     blocks.data.map(async (block) => {
 
@@ -73,7 +74,10 @@ async function getBlocks() {
         
         const reward = await axios.get('https://' + process.env.NODE_IP + '/blocks/at/' + (+block.height - 1))
         const prevBlockFee = (reward.data.fee / process.env.ATOMIC)
-        const adjustedReward = (block.fee * 0.4) + (prevBlockFee * 0.6)
+        const adjustedReward = ((block.fee / process.env.ATOMIC) * 0.4) + (prevBlockFee * 0.6)
+        console.log(prevBlockFee)
+
+        console.log(adjustedReward)
 
         // Insert block - Duplicate block are ignored by the DB
         await db('blocks')
