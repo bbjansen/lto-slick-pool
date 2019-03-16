@@ -8,7 +8,7 @@ const db = require('../utils/utils').knex
 const twitter = require('../utils/utils').twitter
 const axios = require('axios')
 const cron = require('node-cron')
-getBlocks()
+
 // Run every minute
 cron.schedule('* * * * *', () => {
   getBlocks()
