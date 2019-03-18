@@ -55,7 +55,7 @@ async function verifyBlocks() {
         }
         
         // Log
-        consle.log('[Block] [' + block.blockIndex + '] verified.')
+        console.log('[Block] [' + block.blockIndex + '] verified.')
  
       }
       else {
