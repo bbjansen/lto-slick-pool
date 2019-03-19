@@ -37,15 +37,10 @@ function getBlocks() {
             })
           }},
           { title: 'Reward', field: 'reward', align: 'left', formatter: function(row) {
-
-            if(row._cell.value) {
               return row._cell.value.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })
-            } else {
-              return 'N/A'
-            }
           }},
           {
             title: 'Verified', field: 'verified', align: 'center', formatter: function (row) {
