@@ -16,7 +16,7 @@ html
 								#blockTable
 							.column
 								div(style='width: 100%;height:auto;')
-									canvas#blockChart
+									canvas#blockChart(onclick='fullScreen(this)')
  
 						h1.title.is-size-2  Mempool <span class='tag is-dark is-large' id='mempoolCount'>0</span>
 						.columns
@@ -50,7 +50,7 @@ html
 												
 
 								div(style='width: 100%;height:auto;')
-									canvas#txChart
+									canvas#txChart(onclick='fullScreen(this)')
 
 						h1.title.is-size-2 Block Forgers <span class='tag is-dark is-large' id='nodeCount'>0</span>
 
@@ -72,7 +72,7 @@ html
 														option(value='year') Year
 
 								div(style='width: 100%;height:auto;margin-top:6vh;')
-									canvas#nodeChart
+									canvas#nodeChart(onclick='fullScreen(this)')
 								
 						.has-text-left <i><b>Data:</b> based on live incoming data from the LTO-Chain-Cache API (LCCA) designed by LTO Services.</i>
 
