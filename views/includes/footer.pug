@@ -9,9 +9,18 @@ footer.hero-foot(style='padding: 20px 10px 20px 10px;')
 				a(href='https://wallet.lto.network') LTO Wallet
 
 			.level-right
-				| <a href='https://twitter.com/ltoservice/'>@ltoservice</a>
+				|
+				a.tooltip.is-tooltip-bottom(data-tooltip='Twitter' href='https://twitter.com/ltoservice/')
+					span.icon.is-large
+						i.icon-social-twitter.is-size-5
 				| &nbsp | &nbsp
-				| 3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU
+				a.tooltip.is-tooltip-bottom(data-tooltip='Telegram' href='https://t.me/joinchat/IYLGqBXLwhAMOfYrE_abOA')
+					span.icon.is-large
+						i.icon-paper-plane.is-size-5
+						
+				| &nbsp | &nbsp
+				span.tooltip.is-tooltip-bottom(data-tooltip='Lease Address')
+					| 3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU
 				| &nbsp | &nbsp
 				| LTO Services &copy; 2019
 				
