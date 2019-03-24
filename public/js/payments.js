@@ -35,7 +35,6 @@ function getPayments() {
               },
               label: function (row) {
                 if(row._cell.value === null) {
-                  console.log("TESD")
                   return 'N/A'
                 } else {
                   return row._cell.value

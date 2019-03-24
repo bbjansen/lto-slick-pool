@@ -119,7 +119,7 @@ async function processRewards() {
         // Tweet Payout
         if(+process.env.PRODUCTION === 1) {
           await twitter.post('statuses/update', { 
-            status: 'Payout ' + broadcast.data.id + ' have been processed with a total of ' + totalSum.sum.toLocaleString(undefined, {
+            status: 'Payout ' + broadcast.data.id + ' has been broadcasted with a total of ' + totalSum.sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
             })  + ' $LTO! https://lto.services/payments'

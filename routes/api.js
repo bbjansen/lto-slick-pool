@@ -133,7 +133,6 @@ router.get('/payments', async function(req, res, next) {
     .select('id', 'blockIndex', 'tid', 'amount', 'fee', 'confirmed', 'timestamp')
     .orderBy('blockIndex', 'desc')
 
-    console.log(getPayments)
     getPayments.forEach(function(payment) {
       payment.timestamp = new Date(payment.timestamp)
       payment.timestamp = payment.timestamp
