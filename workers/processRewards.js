@@ -5,8 +5,10 @@
 'use strict'
 require('dotenv').config('../')
 const db = require('../utils/utils').knex
-const axios = require('axios')
 const cron = require('node-cron')
+const uuid = require('uuid/v1')
+const axios = require('axios')
+const twitter = require('../utils/utils').twitter
 
 // Run every midnight
 cron.schedule('0 0 * * *', () => {
@@ -14,115 +16,140 @@ cron.schedule('0 0 * * *', () => {
 })
 
 // Scans for rewards in the DB that have no been paid out yet on a defined
-// interval grouped by the lease ID and takes the sum of the total rewards.
+// interval grouped by the lease ID and calcs the sum of the total rewards.
 // This data is used to create a mass transaction to payout the rewards.
 
 async function processRewards() {
   try {
-    // Fetch 100 (lto network pussy limit) unpaid payments,
-    const getPayments = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .select('payments.id', 'payments.blockIndex', 'leases.address', 'payments.amount')
-    .where('payments.paid', false)
-    .limit(100)
 
-    // Get sum of unpaid payments
+    // Get rewards
+    const getRewards = await db('rewards')
+    .leftJoin('leases', 'rewards.lid', 'leases.tid')
+    .select('rewards.id', 'rewards.amount', 'rewards.blockIndex', 'leases.address')
+    .where('rewards.paid', false)
 
-    const getPaymentTotal = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .sum('payments.amount as sum')
-    .where('payments.paid', false)
+    // Get all calculated reward ids
+    const calcRewards = await db('rewards')
+    .leftJoin('leases', 'rewards.lid', 'leases.tid')
+    .select('leases.address')
+    .sum('rewards.amount as sum')
+    .where('rewards.paid', false)
+    .groupBy('leases.address')
 
-    .sum('payments.amount as sum')
 
-    if(getPayments.length <= 0) {
-      throw('[Payment] no payments to process')
-    }
-    else if(getPaymentTotal[0].sum < process.env.PAYOUT) {
-      throw('[Payment] [' + getPaymentTotal[0].sum + '/' + process.env.PAYOUT + '] payout point not reached yet.')
-    }
-    else {
+    // Calculate total sum
+    const totalSum = calcRewards.reduce(function (r, o) {
+      (r.sum)? r.sum += o.sum : r.sum = o.sum
+      return r
+    }, {})
 
-      let transfers = []
-      let track = []
+    // If payout limit is reached
+    if(totalSum.sum >= env.process.PAYOUT) {
 
-      // Loop through each payment
-      getPayments.forEach(function (payment) {
-        
-        // Push each transfer data to the transfer array
-        transfers.push({
-          recipient: payment.address,
-          amount: Math.floor(payment.amount * process.env.ATOMIC)
+      // Split in batches of 100 due to network restraints on mass transfer
+      let batch = []
+
+      while (calcRewards.length) {
+        batch.push(calcRewards.splice(0, 100))
+      }
+
+      // Map baches -> process, sign and payout by set interval (see splice above)
+      batch.map(async (rewards) => {
+
+        // Get Height
+        const getIndex = await axios.get('https://' + process.env.NODE_IP + '/blocks/height')
+
+        // Prepare the transfer array
+        let transfers = []
+
+        rewards.map(r => {
+          transfers.push({
+            recipient: r.address,
+            amount: Math.round(r.sum * process.env.ATOMIC),
+          })
         })
 
-        // Push each id to track array for later identification
-        track.push({
-          id: payment.id,
-          block: payment.blockIndex
+        // Sign the mass payment
+        const signed = await axios.post('https://' + process.env.NODE_IP + '/transactions/sign',
+        {
+          type: 11,
+          version: 1,
+          sender: process.env.NODE_ADDRESS,
+          transfers: transfers,
+          fee: Math.round((0.25 + (0.10 * transfers.length)) * process.env.ATOMIC)
+        },
+        {
+          headers: { 
+            'X-API-Key': process.env.NODE_PASS
+          }
         })
-      })
 
-      // Calculate total unpaid 
-
-      // Sign a mass payment for each produced block
-      axios.post('https://' + process.env.NODE_IP + '/transactions/sign',
-      {
-        type: 11,
-        version: 1,
-        sender: process.env.NODE_ADDRESS,
-        transfers: transfers,
-        fee: Math.round((0.25 + (0.10 * payments.length)) * process.env.ATOMIC)
-      },
-      {
-        headers: { 
-          'X-API-Key': process.env.NODE_PASS
-        }
-      })
-      .then(signed => {
-        return axios.post('https://' + process.env.NODE_IP + '/transactions/broadcast',
+        //Broadcast payment
+        await axios.post('https://' + process.env.NODE_IP + '/transactions/broadcast',
         signed.data,
         {
           headers: { 
             'X-API-Key': process.env.NODE_PASS
           }
         })
-      })
-      .then(tx => {
 
-        console.log('[Payment] [' + tx.data.id +'] broadcasted')
+        // Store payment
+        let id = uuid()
 
-        track.forEach(payment => {
-
-          db('payments').update({
-            tid: tx.data.id,
-            paid: true
-          })
-          .where('id', payment.id)
-          .then(d => {
-            console.log('[Payment] [' + payment.id + '] paid')
-          })
-          .catch(err => {
-            console.log(err)
-          })
-
-          // Mark block as paid
-          db('blocks')
-          .update({
-            paid: true
-          })
-          .where('blockIndex', payment.block)
-          .then(d => {
-            console.log('[Block] [' + payment.block+ '] paid')
-          })
-          .catch(err => {
-            console.log('' + err)
-          })
-
+        await db('payments').insert({
+          id: id,
+          tid: broadcast.data.id,
+          amount: (signed.data.totalAmount / process.env.ATOMIC),
+          fee: (signed.data.fee / process.env.ATOMIC),
+          blockIndex: getIndex.data.height,
+          timestamp: signed.data.timestamp
         })
+        
+        // update rewards with pid uuid (detect using address)
+        rewards.map(async r => {
+          await db('rewards')
+          .leftJoin('leases', 'rewards.lid', 'leases.tid')
+          .update({
+            pid: id,
+            paid: true
+          })
+          .where('leases.address', r.address)
+        })
+
+        // Tweet Payout
+        if(+process.env.PRODUCTION === 1) {
+          await twitter.post('statuses/update', { 
+            status: 'Payout ' + broadcast.data.id + ' have been processed with a total of ' + totalSum.sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })  + ' $LTO! https://lto.services/payments'
+          })
+        }
+
+        console.log('[Payment] [' + broadcast.data.id +'] broadcasted')
       })
-      .catch(err => {
-        console.log('' + err)
+
+      // Get all blocks
+      let blocks = []
+
+      getRewards.map(async (i) => {
+        blocks.push(i.blockIndex)
       })
+
+      // Filter duplicates
+      blocks = blocks.filter((v, i, a) => a.indexOf(v) === i)
+
+      // Mark all processed blocks as paid
+      blocks.map(async (block) => {
+        await db('blocks')
+        .update({
+          paid: true
+        })
+        .where('blockIndex', block)
+      })
+    }
+    else {
+      console.log('[Payment] limit of ' + env.process.PAYOUT + ' has not been reached')
     }
   }
   catch(err) {

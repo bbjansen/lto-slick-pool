@@ -58,7 +58,6 @@ db.schema.hasTable('payments').then(function (exists) {
   if (!exists) {
     return db.schema.createTable('payments', function (table) {
       table.uuid('id').unique().notNullable()
-      table.string('lid').notNullable()
       table.string('tid')
       table.decimal('amount', [15, 9]).notNullable()
       table.decimal('fee', [15, 9]).notNullable()

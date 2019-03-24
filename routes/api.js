@@ -45,9 +45,11 @@ router.get('/lease/:address', async function(req, res, next) {
 
     // Get Payments
     const getPayments = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
+    .leftJoin('rewards', 'payments.id', 'rewards.pid')
+    .leftJoin('leases', 'rewards.lid', 'leases.tid')
     .select('payments.id', 'payments.blockIndex', 'payments.tid', 'leases.address', 'payments.amount', 'payments.fee', 'payments.confirmed', 'payments.timestamp')
     .where('leases.address', req.params.address)
+    .groupBy('payments.id')
 
     getPayments.forEach(function(payment) {
       payment.timestamp = new Date(payment.timestamp)
@@ -128,10 +130,10 @@ router.get('/payments', async function(req, res, next) {
   try {
 
     const getPayments = await db('payments')
-    .leftJoin('leases', 'payments.lid', 'leases.tid')
-    .select('payments.id', 'payments.blockIndex', 'payments.tid', 'leases.address', 'payments.amount', 'payments.fee', 'payments.confirmed', 'payments.timestamp')
-    .orderBy('payments.blockIndex', 'desc')
+    .select('id', 'blockIndex', 'tid', 'amount', 'fee', 'confirmed', 'timestamp')
+    .orderBy('blockIndex', 'desc')
 
+    console.log(getPayments)
     getPayments.forEach(function(payment) {
       payment.timestamp = new Date(payment.timestamp)
       payment.timestamp = payment.timestamp

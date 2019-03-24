@@ -59,7 +59,7 @@ async function getBlocks() {
     const newScanIndex = (lastIndex[0].scanIndex + blockCount)
     
     // Scan for new blocks starting at the last recorded block index (scanIndex)
-    const blocks = await axios.get('https://' + process.env.NODE_IP + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + lastIndex[0].scanIndex + '/' + newScanIndex)
+    const blocks = await axios.get('https://' + process.env.NODE_IP + '/blocks/address/' + process.env.NODE_ADDRESS + '/' + (lastIndex[0].scanIndex + 1) + '/' + newScanIndex)
 
     // Loop through each detected block
     blocks.data.map(async (block) => {

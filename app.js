@@ -62,9 +62,7 @@ require('./workers/processBlocks')
 require('./workers/getLeases')
 require('./workers/verifyLeases')
 
-//require('./workers/processRewards')
-
-
+require('./workers/processRewards')
 
 
 // error handler

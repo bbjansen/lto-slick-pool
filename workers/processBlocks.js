@@ -8,8 +8,8 @@ const db = require('../utils/utils').knex
 const cron = require('node-cron')
 const uuid = require('uuid/v1')
 
-// Run every 4 hours
-cron.schedule('0 */4 * * *', () => {
+// Run every 50 minute - 10 minutes before payout at midnight
+cron.schedule('*/50 * * * *', () => {
   processBlocks()
 })
 
