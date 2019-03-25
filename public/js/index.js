@@ -1,5 +1,6 @@
 // Initialize Data
 if(address) {
+  console.log(address)
   getStats(address)
 } else {
   document.getElementById('stats').classList.add('is-hidden')
@@ -7,6 +8,7 @@ if(address) {
 
 // Get Homepage Stats
 function getStats(address) {
+  console.log(address)
   document.getElementById('stats').classList.add('is-hidden')
 
   fetch('/api/lease/' + address, {
@@ -100,7 +102,9 @@ function getStats(address) {
     //Set Cookie
     document.cookie = 'address=' + address
 
+
   }).catch(function(err) {
     document.getElementById('stats').classList.add('is-hidden')
+    document.cookie = 'address='
   })
 }

@@ -10,14 +10,11 @@ const router = express.Router()
 router.get('/', async function(req, res, next) {
   try {
     res.render('explorer', {
-      title: 'Explorer',
-      address: req.cookies.address || null
+      title: 'Explorer'
     })
   } catch (err) {
     next(err)
   }
 })
-
-
 
 module.exports = router

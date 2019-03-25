@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const ip = 'https://lto.cloud/'
-const address = document.cookie.split('=')[1]
+const address = document.cookie.replace(/(?:(?:^|.*;\s*)address\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 const nodeAddress = '3JexCgRXGFUiuNoJTkkWucSumteRWdb8kKU'
 const atomicNumber = 100000000
 
