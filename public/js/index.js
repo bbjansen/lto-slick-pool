@@ -1,6 +1,5 @@
 // Initialize Data
 if(address) {
-  console.log(address)
   getStats(address)
 } else {
   document.getElementById('stats').classList.add('is-hidden')
