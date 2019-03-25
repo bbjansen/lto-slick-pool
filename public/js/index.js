@@ -7,7 +7,6 @@ if(address) {
 
 // Get Homepage Stats
 function getStats(address) {
-  console.log(address)
   document.getElementById('stats').classList.add('is-hidden')
 
   fetch('/api/lease/' + address, {
