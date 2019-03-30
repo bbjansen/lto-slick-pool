@@ -44,7 +44,7 @@ async function processRewards() {
     }, {})
 
     // If payout limit is reached
-    if(totalSum.sum >= env.process.PAYOUT) {
+    if(totalSum.sum >= process.env.PAYOUT) {
 
       // Split in batches of 100 due to network restraints on mass transfer
       let batch = []
@@ -149,7 +149,7 @@ async function processRewards() {
       })
     }
     else {
-      console.log('[Payment] limit of ' + env.process.PAYOUT + ' has not been reached')
+      console.log('[Payment] limit of ' + process.env.PAYOUT + ' has not been reached')
     }
   }
   catch(err) {
