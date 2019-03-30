@@ -85,7 +85,7 @@ async function processRewards() {
         })
 
         //Broadcast payment
-        await axios.post('https://' + process.env.NODE_IP + '/transactions/broadcast',
+        const broadcast = await axios.post('https://' + process.env.NODE_IP + '/transactions/broadcast',
         signed.data,
         {
           headers: { 
