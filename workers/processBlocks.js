@@ -13,6 +13,7 @@ cron.schedule('*/50 * * * *', () => {
   processBlocks()
 })
 
+
 // Scans for verified blocks in the DB that have no been processed yet om
 // a defined interval. It takes all addresses in the DB who had an active 
 // lease at the time of the produced block and calculates its earned share

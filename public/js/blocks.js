@@ -52,39 +52,24 @@ function getBlocks() {
             let fee = cell.getData().fee
             let reward = cell.getData().reward
             let luck = (reward / fee).toFixed(1)
-            let color
 
             if(isNaN(luck)) {
               luck = 0
-              color = 'danger'
+            }
+            else if(luck === 'Infinity') {
+              luck = '&#8734;'
             }
 
-            if(luck < 1) {
-              color = 'danger'
-            }
-            else if(luck < 3) {
-              color = 'warning'
-            }
-            else if(luck < 6) { 
-              color = 'success'
-            }
-            else if(luck < 9) { 
-              color = 'info'
-            }
-            else {
-              color = 'primary'
-            }
-
-            return '<span class="tag is-' + color + ' is-medium" style="width:80px;">' + luck + '</span>'
+            return luck
           }},
           {
             title: 'Maturity', field: 'verified', align: 'center', formatter: function (row) {
-              let left = moment.duration(moment().diff(moment(row.getData().timestamp))).asMinutes().toFixed(0)
+              let duration = moment.duration(moment().diff(moment(row.getData().timestamp))).asMinutes().toFixed(0)
 
               if(row._cell.value === 1) {
-                return '<div class="tag is-link is-medium" style="width:80px;">90/90</div>'
+                return '90/90'
               } else {
-                return '<div class="tag is-info is-medium" style="width:80px;">' + left + '/90</div>'
+                return duration + '/90'
               }
             }
           },
