@@ -102,7 +102,8 @@ async function processRewards() {
           amount: (signed.data.totalAmount / process.env.ATOMIC),
           fee: (signed.data.fee / process.env.ATOMIC),
           blockIndex: getIndex.data.height,
-          timestamp: signed.data.timestamp
+          timestamp: signed.data.timestamp,
+          confirmed: true
         })
         
         // update rewards with pid uuid (detect using address)
