@@ -83,7 +83,8 @@ function getMempool(txTable) {
   .then((resp) => resp.json())
     .then(function(data) {
 
-      if(data.length >= 1) {
+      // Put a max on it to avoid browser crash
+      if(data.length >= 1 && data.length <= 500) {
         // Clear & Update Table
         txTable.clearData()
 
@@ -591,6 +592,8 @@ var txChart = new Chart('txChart', {
   }
 })
 
+
+
 // Intialize Node Table
 var nodeTable = new Tabulator('#nodeTable', {
   data: [],
@@ -709,25 +712,24 @@ setInterval(function() {
 }, 60000)
 
 
-// Initiate Producers
-//getProducers(nodeTable, nodeChart, 'week')
 
-//setInterval(function() { 
-//  chartProducersFilter()
-//}, 60000)
+
+// Initiate Producers
+getProducers(nodeTable, nodeChart, 'week')
+
+setInterval(function() { 
+  chartProducersFilter()
+}, 60000)
 
 
 // FullScreen
-//function fullScreen(elem) {
-//  if (elem.requestFullscreen) {
-//    elem.requestFullscreen();
-//  } else if (elem.mozRequestFullScreen) { /* Firefox */
-//    elem.mozRequestFullScreen();
-// } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-//    elem.webkitRequestFullscreen();
-//  } else if (elem.msRequestFullscreen) { /* IE/Edge */
-//    elem.msRequestFullscreen();
-//  }
-//} 
-
-
+  function fullScreen(elem) {  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { 
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { 
+    elem.msRequestFullscreen();
+  }
+} 

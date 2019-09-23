@@ -62,8 +62,9 @@ require('./workers/processBlocks')
 require('./workers/getLeases')
 require('./workers/verifyLeases')
 
-require('./workers/processRewards')
-
+if(+process.env.APP_PRODUCTION === 1) {
+  require('./workers/processRewards')
+}
 
 // error handler
 app.use(function onError (err, req, res, next) {
