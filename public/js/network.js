@@ -192,40 +192,44 @@ function getProducers(nodeTable, nodeChart, period) {
   .then((resp) => resp.json())
   .then(function(data) {
 
-    // Clear Table and Chart
-    nodeTable.clearData()
-    nodeChart.data.datasets[0].data = null
-    nodeChart.update()
+    if(data.length >= 1) {
+      // Clear Table and Chart
+      nodeTable.clearData()
+      nodeChart.data.datasets[0].data = null
+      nodeChart.update()
 
-    // Populate Table and Chart
-    data.forEach(producer => {
+      // Populate Table and Chart
+      data.forEach(producer => {
 
-      nodeTable.addData({
-        generator: producer.generator,
-        label: producer.label,
-        url: producer.url,
-        pool: producer.pool,
-        blocks: producer.blocks,
-        earnings: producer.earnings,
-        share: producer.share
+        nodeTable.addData({
+          generator: producer.generator,
+          label: producer.label,
+          url: producer.url,
+          pool: producer.pool,
+          blocks: producer.blocks,
+          earnings: producer.earnings,
+          share: producer.share
+        })
+
+        nodeChart.data.labels.push(producer.label)
+        nodeChart.data.datasets[0].data.push(producer.share)
+
+        //Push color
+        var r = Math.random()
+        var s = 180
+        
+        var color = 'rgba(126, 12,' +  Math.round(r*s) + ',' + r.toFixed(1) + ')'
+        nodeChart.data.datasets[0].backgroundColor.push(color)
       })
 
-      nodeChart.data.labels.push(producer.label)
-      nodeChart.data.datasets[0].data.push(producer.share)
+      // Update Chart
+      nodeChart.update()
 
-      //Push color
-      var r = Math.random()
-      var s = 180
-      
-      var color = 'rgba(126, 12,' +  Math.round(r*s) + ',' + r.toFixed(1) + ')'
-      nodeChart.data.datasets[0].backgroundColor.push(color)
-    })
-
-    // Update Chart
-    nodeChart.update()
-
-    //Set Total Count
-    document.getElementById('nodeCount').innerText = data.length || 0
+      //Set Total Count
+      document.getElementById('nodeCount').innerText = data.length || 0
+    } else {
+      document.getElementById('nodeCount').innerText = data.length || 0
+    }
   }).catch(function(err) {
   })
 }
