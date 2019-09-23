@@ -48,7 +48,7 @@ async function verifyBlocks() {
         .where('paid', false)
 
         // Tweet Maturity
-        if(+process.env.PRODUCTION === 1) {
+        if(+process.env.APP_PRODUCTION === 1) {
           await twitter.post('statuses/update', { 
             status: 'Block ' + block.blockIndex.toLocaleString() + ' has matured. Total unpaid amount is now ' + +getTotalUnpaid[0].sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,

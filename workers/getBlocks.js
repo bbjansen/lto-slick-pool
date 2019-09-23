@@ -84,7 +84,7 @@ async function getBlocks() {
         })
 
         // Tweet Maturity
-        if(+process.env.PRODUCTION === 1) {
+        if(+process.env.APP_PRODUCTION === 1) {
           await twitter.post('statuses/update', { 
             status: 'Block ' + block.height.toLocaleString() + ' has been forged with a reward of ' + adjustedReward.toLocaleString(undefined, {
               minimumFractionDigits: 2,
