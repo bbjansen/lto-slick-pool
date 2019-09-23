@@ -84,7 +84,7 @@ function getMempool(txTable) {
     .then(function(data) {
 
       // Put a max on it to avoid browser crash
-      if(data.length >= 1 && data.length <= 500) {
+      if(data.length >= 1 && data.length <= 1000) {
         // Clear & Update Table
         txTable.clearData()
 
