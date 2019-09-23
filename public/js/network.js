@@ -710,24 +710,24 @@ setInterval(function() {
 
 
 // Initiate Producers
-getProducers(nodeTable, nodeChart, 'week')
+//getProducers(nodeTable, nodeChart, 'week')
 
-setInterval(function() { 
-  chartProducersFilter()
-}, 60000)
+//setInterval(function() { 
+//  chartProducersFilter()
+//}, 60000)
 
 
 // FullScreen
-function fullScreen(elem) {
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) { /* Firefox */
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE/Edge */
-    elem.msRequestFullscreen();
-  }
-} 
+//function fullScreen(elem) {
+//  if (elem.requestFullscreen) {
+//    elem.requestFullscreen();
+//  } else if (elem.mozRequestFullScreen) { /* Firefox */
+//    elem.mozRequestFullScreen();
+// } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+//    elem.webkitRequestFullscreen();
+//  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+//    elem.msRequestFullscreen();
+//  }
+//} 
 
 
