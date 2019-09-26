@@ -98,8 +98,8 @@ function getMempool(txTable) {
         })
 
         // Update Chart
-        txChart.data.datasets[0].data.push(block.blocks.size)
-        txChart.update()
+        //txChart.data.datasets[0].data.push(block.blocks.size)
+        //txChart.update()
 
         // Update Count
         document.getElementById('mempoolCount').innerText = data.length
@@ -240,6 +240,7 @@ function chartProducersFilter() {
   let period = document.getElementById('producersChartDateFilter').value
   getProducers(nodeTable, nodeChart, period)
 }
+
 //Initialize Block Table
 var blockTable = new Tabulator('#blockTable', {
   data: [],
@@ -261,10 +262,13 @@ var blockTable = new Tabulator('#blockTable', {
     },
     { title: 'Size', field: 'size', align: 'left'},
     { title: 'Txns', field: 'count', align: 'left', formatter: function(row) {
+      
+      row._cell.value = row._cell.value || 0
+
       return row._cell.value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-      })
+      }) 
     }},
     { title: 'Timestamp', field: 'timestamp', align: 'left', formatter: function(row) {
       return moment(row._cell.value).fromNow()
@@ -592,8 +596,6 @@ var txChart = new Chart('txChart', {
   }
 })
 
-
-
 // Intialize Node Table
 var nodeTable = new Tabulator('#nodeTable', {
   data: [],
@@ -615,24 +617,32 @@ var nodeTable = new Tabulator('#nodeTable', {
       return res || row.getValue()
     }},
     { title: 'Pool Amount', field: 'pool', align: 'left', formatter: function(row) {
+      row._cell.value = row._cell.value || 0
+
       return row._cell.value.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       })
     }},
     { title: 'Blocks', field: 'blocks', align: 'left', formatter: function(row) {
+      row._cell.value = row._cell.value || 0
+
       return row._cell.value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
       })
     }},
     { title: 'Earnings', field: 'earnings', align: 'left', formatter: function(row) {
+      row._cell.value = row._cell.value || 0
+
       return row._cell.value.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       })
     }},
     { title: 'Share', field: 'share', align: 'left', formatter: function(row) {
+      row._cell.value = row._cell.value || 0
+
       return row._cell.value + '%'
     }}
   ]
@@ -686,14 +696,12 @@ var nodeChart = new Chart('nodeChart', {
   }
 })
 
-
-
 // Initiate Blocks
 getLastBlocks(blockTable, blockChart)
 
 setInterval(function() { 
   getLastBlock(blockTable, blockChart)
-}, 7000)
+}, 15000)
 
 
 // Initiate Mempool
@@ -701,7 +709,7 @@ getMempool(txTable)
 
 setInterval(function() { 
   getMempool(txTable)
-}, 5000)
+}, 15000)
 
 
 // Initiate TX Chart
