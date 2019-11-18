@@ -76,7 +76,7 @@ async function processRewards() {
           version: 1,
           sender: process.env.NODE_ADDRESS,
           transfers: transfers,
-          fee: Math.round((process.env.TRANSFER_FEE + (0.10 * transfers.length)) * process.env.ATOMIC)
+          fee: Math.round((+process.env.TRANSFER_FEE + +(0.10 * transfers.length)) * process.env.ATOMIC)
         },
         {
           headers: { 
