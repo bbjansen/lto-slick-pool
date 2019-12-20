@@ -53,7 +53,7 @@ async function verifyBlocks() {
             status: 'Block ' + block.blockIndex.toLocaleString() + ' has matured. Total unpaid amount is now ' + +getTotalUnpaid[0].sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
-            })  + ' $LTO. https://lto.services/blocks'
+            })  + ' $LTO. https://lease.lto.services/blocks'
           })
         }
         

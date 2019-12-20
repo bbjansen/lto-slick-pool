@@ -123,7 +123,7 @@ async function processRewards() {
             status: 'Payout ' + broadcast.data.id + ' has been broadcasted with a total of ' + totalSum.sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
-            })  + ' $LTO! https://lto.services/payments'
+            })  + ' $LTO! https://lease.lto.services/payments'
           })
         }
 

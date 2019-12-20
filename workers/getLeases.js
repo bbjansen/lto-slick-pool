@@ -54,7 +54,7 @@ cron.schedule('* * * * *', () => {
               status: 'Lease ' + lease.id + ' signed by ' + lease.sender + ' with an amount of ' + (lease.amount / process.env.ATOMIC).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
-              })+ ' $LTO! https://lto.services/leases'
+              })+ ' $LTO! https://lease.lto.services/leases'
             })
           }
 

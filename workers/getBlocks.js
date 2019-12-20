@@ -89,7 +89,7 @@ async function getBlocks() {
             status: 'Block ' + block.height.toLocaleString() + ' has been forged with a reward of ' + adjustedReward.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
-            })  + ' $LTO! https://lto.services/blocks'
+            })  + ' $LTO! https://lease.lto.services/blocks'
           })
         }
 
