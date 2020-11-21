@@ -8,8 +8,8 @@ const db = require('../utils/utils').knex
 const axios = require('axios')
 const cron = require('node-cron')
 
-// Run every minute
-cron.schedule('* * * * *', async function () {
+// Run every hour
+cron.schedule('0 * * * *', async function () {
   verifyLeases()
 })
 
@@ -23,8 +23,8 @@ async function verifyLeases() {
   try {
     // Fetch logged active leases
     const leases = await db('leases')
-    .select('tid')
-    .where('active', true)
+      .select('tid')
+      .where('active', true)
 
     // Get current height
     const blockIndex = await axios.get('https://' + process.env.NODE_IP + '/blocks/height')
@@ -36,17 +36,17 @@ async function verifyLeases() {
       const tx = await axios.get('https://' + process.env.NODE_IP + '/transactions/info/' + lease.tid)
 
       // Can't hurt to double check :)
-      if(lease.tid === tx.data.id) {
+      if (lease.tid === tx.data.id) {
 
         // Update status if the lease is not active anymore
-        if(tx.data.status !== 'active') {
+        if (tx.data.status !== 'active') {
 
           await db('leases')
-          .update({
-            end: blockIndex.data.height,
-            active: false
-          })
-          .where('tid', lease.tid)
+            .update({
+              end: blockIndex.data.height,
+              active: false
+            })
+            .where('tid', lease.tid)
 
           // Log
           console.log('[Lease] [' + lease.tid + '] [' + blockIndex.data.height + '] canceled.')
@@ -54,7 +54,7 @@ async function verifyLeases() {
       }
     })
   }
-  catch(err) {
+  catch (err) {
     console.log(err)
   }
 }
