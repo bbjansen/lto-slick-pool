@@ -3,7 +3,7 @@
 // Please see the included LICENSE file for more information.
 'use strict'
 
-const knex = module.exports = require('knex')({
+const knex = require('knex')({
   client: 'mysql',
   connection: {
     host: process.env.DB_HOST,
