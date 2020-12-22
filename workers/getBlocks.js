@@ -73,7 +73,7 @@ async function getBlocks() {
         
         const reward = await axios.get('https://' + process.env.NODE_IP + '/blocks/at/' + (+block.height - 1))
         const prevBlockFee = (reward.data.fee / process.env.ATOMIC)
-        const adjustedReward = ((block.fee / process.env.ATOMIC) * 0.4) + (prevBlockFee * 0.6) - (transactionCount * 0.1)
+        const adjustedReward = ((block.fee / process.env.ATOMIC) * 0.4) + (prevBlockFee * 0.6) - (block.transactionCount * 0.1)
         // Insert block - Duplicate block are ignored by the DB
         await db('blocks')
         .insert({
